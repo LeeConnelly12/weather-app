@@ -35,8 +35,8 @@ const dailyForecast = computed(() => {
 
     return {
       day: format(date, 'EEE'),
-      min: forecast.temperature_2m_min[index],
-      max: forecast.temperature_2m_max[index],
+      min: Math.round(forecast.temperature_2m_min[index]) + '°',
+      max: Math.round(forecast.temperature_2m_max[index]) + '°',
       weatherCode: forecast.weather_code[index],
     }
   })
@@ -66,7 +66,7 @@ const hourlyForecast = computed(() => {
       const index = forecast.time.indexOf(date)
 
       return {
-        temperature: forecast.temperature_2m[index],
+        temperature: Math.round(forecast.temperature_2m[index]) + '°',
         time: format(date, 'h a'),
         weatherCode: forecast.weather_code[index],
       }
@@ -80,11 +80,11 @@ const setPlace = async (result) => {
     date: format(new Date(), 'EEEE, MMM d, yyyy'),
     dailyForecast: daily,
     hourlyForecast: hourly,
-    feelsLike: current.apparent_temperature,
+    feelsLike: Math.round(current.apparent_temperature) + '°',
     humidity: current.relative_humidity_2m,
     name: result.name,
     precipitation: current.precipitation,
-    temperature: current.temperature_2m,
+    temperature: Math.round(current.temperature_2m) + '°',
     weatherCode: current.weather_code,
     wind: current.wind_speed_10m,
   }
