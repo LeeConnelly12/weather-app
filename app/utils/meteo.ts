@@ -18,7 +18,7 @@ export async function fetchForecastForCoords(latitude: number, longitude: number
   const params = {
     latitude: latitude,
     longitude: longitude,
-    daily: 'temperature_2m_min,temperature_2m_max',
+    daily: 'temperature_2m_min,temperature_2m_max,weather_code',
   }
 
   const responses = await fetchWeatherApi(url, params)
@@ -40,6 +40,7 @@ export async function fetchForecastForCoords(latitude: number, longitude: number
         time: dailyTimeArray,
         temperature_2m_min: daily.variables(0)!.valuesArray(),
         temperature_2m_max: daily.variables(1)!.valuesArray(),
+        weather_code: daily.variables(2)!.valuesArray(),
       },
     }),
   }

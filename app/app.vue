@@ -1,4 +1,6 @@
 <script setup>
+import { format } from 'date-fns'
+
 useHead({
   title: 'Weather App',
   bodyAttrs: {
@@ -29,9 +31,10 @@ const dailyForecast = computed(() => {
     const index = forecast.time.indexOf(date)
 
     return {
-      day: 'Tue',
+      day: format(date, 'EEE'),
       min: forecast.temperature_2m_min[index],
       max: forecast.temperature_2m_max[index],
+      weatherCode: forecast.weather_code[index],
     }
   })
 })
@@ -41,6 +44,7 @@ const setPlace = async (result) => {
 
   place.value = {
     name: result.name,
+    date: format(new Date(), 'EEEE, MMM d, yyyy'),
     forecast: forecast,
   }
 }
@@ -62,13 +66,14 @@ const setPlace = async (result) => {
     </ul>
     <div v-if="place">
       <h2>{{ place.name }}</h2>
-      <p>{{ new Date().toLocaleDateString() }}</p>
+      <p>{{ place.date }}</p>
     </div>
     <div v-if="dailyForecast.length">
       <h2>Daily forecast</h2>
       <ul>
         <li v-for="forecast in dailyForecast" :key="forecast.day">
           <p>{{ forecast.day }}</p>
+          <WeatherCode :weatherCode="forecast.weatherCode" />
           <p>{{ forecast.min }}</p>
           <p>{{ forecast.max }}</p>
         </li>
