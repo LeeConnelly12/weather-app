@@ -1,5 +1,5 @@
 <script setup>
-import { format } from 'date-fns'
+import { addHours, format, startOfHour } from 'date-fns'
 
 useHead({
   title: 'Weather App',
@@ -13,6 +13,9 @@ const search = useState('search', () => '')
 const results = useState('results', () => [])
 
 const place = useState('place', () => null)
+
+const selectedDay = useState('selectedDay', () => format(new Date(), 'EEEE'))
+const currentTime = new Date()
 
 const submit = async () => {
   const response = await fetchCoordsForLocation(search.value)
@@ -39,12 +42,44 @@ const dailyForecast = computed(() => {
   })
 })
 
+const hourlyForecast = computed(() => {
+  if (!place.value?.hourlyForecast?.time) {
+    return []
+  }
+
+  const forecast = place.value.hourlyForecast
+
+  const startTime = startOfHour(currentTime)
+  const endTime = addHours(currentTime, 8)
+
+  return forecast.time
+    .filter((date) => {
+      const forecastDate = new Date(date)
+
+      if (format(forecastDate, 'EEEE') !== selectedDay.value) {
+        return false
+      }
+
+      return forecastDate >= startTime && forecastDate <= endTime
+    })
+    .map((date) => {
+      const index = forecast.time.indexOf(date)
+
+      return {
+        temperature: forecast.temperature_2m[index],
+        time: format(date, 'h a'),
+        weatherCode: forecast.weather_code[index],
+      }
+    })
+})
+
 const setPlace = async (result) => {
-  const { current, daily } = await fetchForecastForCoords(result.latitude, result.longitude)
+  const { current, daily, hourly } = await fetchForecastForCoords(result.latitude, result.longitude)
 
   place.value = {
     date: format(new Date(), 'EEEE, MMM d, yyyy'),
     dailyForecast: daily,
+    hourlyForecast: hourly,
     feelsLike: current.apparent_temperature,
     humidity: current.relative_humidity_2m,
     name: result.name,
@@ -104,6 +139,16 @@ const setPlace = async (result) => {
           <WeatherCode :weatherCode="forecast.weatherCode" />
           <p>{{ forecast.min }}</p>
           <p>{{ forecast.max }}</p>
+        </li>
+      </ul>
+    </div>
+    <div v-if="hourlyForecast.length">
+      <h2>Hourly forecast</h2>
+      <ul>
+        <li v-for="forecast in hourlyForecast" :key="forecast.time">
+          <p>{{ forecast.time }}</p>
+          <WeatherCode :weatherCode="forecast.weatherCode" />
+          <p>{{ forecast.temperature }}</p>
         </li>
       </ul>
     </div>
