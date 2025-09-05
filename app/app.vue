@@ -21,11 +21,11 @@ const submit = async () => {
 }
 
 const dailyForecast = computed(() => {
-  if (!place.value?.forecast?.time) {
+  if (!place.value?.dailyForecast?.time) {
     return []
   }
 
-  const forecast = place.value.forecast
+  const forecast = place.value.dailyForecast
 
   return forecast.time.map((date) => {
     const index = forecast.time.indexOf(date)
@@ -40,12 +40,18 @@ const dailyForecast = computed(() => {
 })
 
 const setPlace = async (result) => {
-  const forecast = await fetchForecastForCoords(result.latitude, result.longitude)
+  const { current, daily } = await fetchForecastForCoords(result.latitude, result.longitude)
 
   place.value = {
-    name: result.name,
     date: format(new Date(), 'EEEE, MMM d, yyyy'),
-    forecast: forecast,
+    dailyForecast: daily,
+    feelsLike: current.apparent_temperature,
+    humidity: current.relative_humidity_2m,
+    name: result.name,
+    precipitation: current.precipitation,
+    temperature: current.temperature_2m,
+    weatherCode: current.weather_code,
+    wind: current.wind_speed_10m,
   }
 }
 </script>
@@ -65,8 +71,30 @@ const setPlace = async (result) => {
       </li>
     </ul>
     <div v-if="place">
-      <h2>{{ place.name }}</h2>
-      <p>{{ place.date }}</p>
+      <div>
+        <h2>{{ place.name }}</h2>
+        <p>{{ place.date }}</p>
+      </div>
+      <div>
+        <WeatherCode :weatherCode="place.weatherCode" />
+        <p>{{ place.temperature }}</p>
+      </div>
+      <div>
+        feels like
+        <div>{{ place.feelsLike }}</div>
+      </div>
+      <div>
+        humidity
+        <div>{{ place.humidity }}</div>
+      </div>
+      <div>
+        wind
+        <div>{{ place.wind }}</div>
+      </div>
+      <div>
+        precipitation
+        <div>{{ place.precipitation }}</div>
+      </div>
     </div>
     <div v-if="dailyForecast.length">
       <h2>Daily forecast</h2>

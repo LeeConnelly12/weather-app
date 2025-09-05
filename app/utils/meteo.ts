@@ -19,6 +19,7 @@ export async function fetchForecastForCoords(latitude: number, longitude: number
     latitude: latitude,
     longitude: longitude,
     daily: 'temperature_2m_min,temperature_2m_max,weather_code',
+    current: 'temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,precipitation,weather_code',
   }
 
   const responses = await fetchWeatherApi(url, params)
@@ -26,7 +27,8 @@ export async function fetchForecastForCoords(latitude: number, longitude: number
   const response = responses[0]
 
   const utcOffsetSeconds = response.utcOffsetSeconds()
-  const daily = response.daily?.() || null
+  const daily = response.daily() || null
+  const current = response.current() || null
 
   const dailyTimeArray = daily
     ? [...Array((Number(daily.timeEnd()) - Number(daily.time())) / daily.interval())].map((_, i) =>
@@ -43,7 +45,17 @@ export async function fetchForecastForCoords(latitude: number, longitude: number
         weather_code: daily.variables(2)!.valuesArray(),
       },
     }),
+    ...(current && {
+      current: {
+        temperature_2m: current.variables(0)!.value(),
+        apparent_temperature: current.variables(1)!.value(),
+        relative_humidity_2m: current.variables(2)!.value(),
+        wind_speed_10m: current.variables(3)!.value(),
+        precipitation: current.variables(4)!.value(),
+        weather_code: current.variables(5)!.value(),
+      },
+    }),
   }
 
-  return weatherData.daily
+  return weatherData
 }
