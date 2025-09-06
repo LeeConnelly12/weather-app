@@ -16,6 +16,8 @@ const selectedDay = useModel(props, 'modelValue')
 const open = ref(false)
 
 const ignoreElRef = useTemplateRef('ignoreElRef')
+
+watch(selectedDay, () => (open.value = false))
 </script>
 
 <template>
@@ -26,7 +28,7 @@ const ignoreElRef = useTemplateRef('ignoreElRef')
       type="button"
       class="flex items-center gap-1.5 rounded-md bg-neutral-600 px-4 py-2 outline-none focus:outline-2 focus:outline-white"
     >
-      <p>{{ selectedDay }}</p>
+      {{ selectedDay }}
       <Chevron :class="{ 'rotate-180': open }" />
     </button>
     <ul
