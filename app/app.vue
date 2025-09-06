@@ -15,14 +15,20 @@ const currentTime = new Date()
 
 const selectedResult = useState('selectedResult', () => null)
 
+const loadingResults = useState('loadingResults', () => false)
+
 const showResults = useState('showResults', () => false)
 
 const submit = async () => {
-  const response = await fetchCoordsForLocation(search.value)
-
-  results.value = response.results
+  loadingResults.value = true
 
   showResults.value = true
+
+  const response = await fetchCoordsForLocation(search.value)
+
+  loadingResults.value = false
+
+  results.value = response.results
 }
 
 const dailyForecast = computed(() => {
@@ -117,7 +123,7 @@ const switchUnits = async () => {
       </button>
     </nav>
     <div class="mt-12 lg:mt-16">
-      <h1 class="font-bricolage-grotesque text-center text-6xl font-bold md:mx-auto md:max-w-lg lg:max-w-none">How's the sky looking today?</h1>
+      <h1 class="text-center font-bricolage-grotesque text-6xl font-bold md:mx-auto md:max-w-lg lg:max-w-none">How's the sky looking today?</h1>
       <form @submit.prevent="submit" class="mt-12 items-center md:grid md:grid-cols-[1fr_auto] md:gap-4 lg:mx-auto lg:mt-16 lg:max-w-2xl">
         <div class="relative flex items-center">
           <img class="pointer-events-none absolute left-6" src="/images/icon-search.svg" alt="" />
@@ -132,7 +138,7 @@ const switchUnits = async () => {
             class="absolute top-full z-10 mt-2 grid max-h-44 w-full gap-1 overflow-y-auto rounded-xl border border-neutral-700 bg-neutral-800 p-2"
             tabindex="-1"
           >
-            <li v-for="result in results" :key="result.id">
+            <li v-if="!loadingResults" v-for="result in results" :key="result.id">
               <button
                 type="button"
                 class="w-full rounded-lg border border-transparent p-2 text-left outline-none hover:border-neutral-600 hover:bg-neutral-700 focus:border-neutral-600 focus:bg-neutral-700 focus:outline-2 focus:outline-white"
@@ -140,6 +146,10 @@ const switchUnits = async () => {
               >
                 {{ result.name }}
               </button>
+            </li>
+            <li class="flex gap-2.5 p-2" v-else>
+              <img src="/images/icon-loading.svg" alt="" width="16" height="16" />
+              <p class="w-full rounded-lg border border-transparent text-left">Search in progress</p>
             </li>
           </ul>
         </div>
@@ -154,7 +164,7 @@ const switchUnits = async () => {
     <div v-if="place" class="lg:mx-auto lg:mt-12 lg:grid lg:max-w-7xl lg:grid-cols-[50rem_24rem] lg:gap-8">
       <div class="mt-8 lg:mt-0 lg:grid lg:grid-rows-[auto_auto_1fr_auto]">
         <div
-          class="bg-today-small md:bg-today-large h-[286px] w-full rounded-[1.25rem] bg-cover bg-no-repeat py-10 text-center md:flex md:items-center md:justify-between md:px-6 md:text-left"
+          class="h-[286px] w-full rounded-[1.25rem] bg-today-small bg-cover bg-no-repeat py-10 text-center md:flex md:items-center md:justify-between md:bg-today-large md:px-6 md:text-left"
         >
           <div>
             <h2 class="text-3xl font-bold">{{ place.name }}</h2>
