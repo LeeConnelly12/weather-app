@@ -1,23 +1,17 @@
 <script setup>
-import { addHours, format, startOfHour } from 'date-fns'
+import { format } from 'date-fns'
 
 const search = useState('search', () => '')
-
 const results = useState('results', () => [])
-
 const place = useState('place', () => null)
-
 const selectedDay = useState('selectedDay', () => format(new Date(), 'EEEE'))
-
 const preferences = useCookie('preferences')
-
-const currentTime = new Date()
-
-const selectedResult = useState('selectedResult', () => null)
-
 const loadingResults = useState('loadingResults', () => false)
-
 const showResults = useState('showResults', () => false)
+
+const daily = useState('daily', () => null)
+const hourly = useState('hourly', () => null)
+const { dailyForecast, hourlyForecast } = useForecast(daily, hourly, selectedDay)
 
 const submit = async () => {
   loadingResults.value = true
@@ -31,68 +25,17 @@ const submit = async () => {
   results.value = response.results
 }
 
-const dailyForecast = computed(() => {
-  if (!place.value?.dailyForecast?.time) {
-    return []
-  }
-
-  const forecast = place.value.dailyForecast
-
-  return forecast.time.map((date) => {
-    const index = forecast.time.indexOf(date)
-
-    return {
-      day: format(date, 'EEE'),
-      min: Math.round(forecast.temperature_2m_min[index]) + '°',
-      max: Math.round(forecast.temperature_2m_max[index]) + '°',
-      weatherCode: forecast.weather_code[index],
-    }
-  })
-})
-
-const hourlyForecast = computed(() => {
-  if (!place.value?.hourlyForecast?.time) {
-    return []
-  }
-
-  const forecast = place.value.hourlyForecast
-
-  const startTime = startOfHour(currentTime)
-  const endTime = addHours(currentTime, 8)
-
-  return forecast.time
-    .filter((date) => {
-      const forecastDate = new Date(date)
-
-      if (format(forecastDate, 'EEEE') !== selectedDay.value) {
-        return false
-      }
-
-      return forecastDate >= startTime && forecastDate <= endTime
-    })
-    .map((date) => {
-      const index = forecast.time.indexOf(date)
-
-      return {
-        temperature: Math.round(forecast.temperature_2m[index]) + '°',
-        time: format(date, 'h a'),
-        weatherCode: forecast.weather_code[index],
-      }
-    })
-})
-
 const setPlace = async (result) => {
-  selectedResult.value = result
-
-  const { current, daily, hourly } = await fetchForecastForCoords(result.latitude, result.longitude, preferences.value.isMetric)
+  const response = await fetchForecastForCoords(result.latitude, result.longitude, preferences.value.isMetric)
+  const current = response.current
+  daily.value = response.daily
+  hourly.value = response.hourly
 
   place.value = {
     date: format(new Date(), 'EEEE, MMM d, yyyy'),
-    dailyForecast: daily,
-    hourlyForecast: hourly,
+    name: result.name,
     feelsLike: Math.round(current.apparent_temperature) + '°',
     humidity: current.relative_humidity_2m + '%',
-    name: result.name,
     precipitation:
       preferences.value.isMetric || preferences.value.precipitation === 'metric'
         ? Math.round(current.precipitation) + ' mm'
