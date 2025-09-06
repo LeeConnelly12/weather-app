@@ -1,13 +1,6 @@
 <script setup>
 import { addHours, format, startOfHour } from 'date-fns'
 
-useHead({
-  title: 'Weather App',
-  bodyAttrs: {
-    class: 'bg-neutral-900 text-white',
-  },
-})
-
 const search = useState('search', () => '')
 
 const results = useState('results', () => [])
