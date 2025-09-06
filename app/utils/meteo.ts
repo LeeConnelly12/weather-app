@@ -12,7 +12,7 @@ export async function fetchCoordsForLocation(location: string) {
   return data.value
 }
 
-export async function fetchForecastForCoords(latitude: number, longitude: number) {
+export async function fetchForecastForCoords(latitude: number, longitude: number, isCelsius: boolean) {
   const url = 'https://api.open-meteo.com/v1/forecast'
 
   const params = {
@@ -21,6 +21,9 @@ export async function fetchForecastForCoords(latitude: number, longitude: number
     daily: 'temperature_2m_min,temperature_2m_max,weather_code',
     current: 'temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,precipitation,weather_code',
     hourly: 'weather_code,temperature_2m,precipitation',
+    temperature_unit: isCelsius ? 'celsius' : 'fahrenheit',
+    wind_speed_unit: isCelsius ? 'kmh' : 'mph',
+    precipitation_unit: isCelsius ? 'mm' : 'inch',
   }
 
   const responses = await fetchWeatherApi(url, params)

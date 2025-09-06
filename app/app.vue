@@ -15,7 +15,12 @@ const results = useState('results', () => [])
 const place = useState('place', () => null)
 
 const selectedDay = useState('selectedDay', () => format(new Date(), 'EEEE'))
+
+const isCelsius = useState('isCelsius', () => true)
+
 const currentTime = new Date()
+
+const selectedResult = useState('selectedResult', () => null)
 
 const submit = async () => {
   const response = await fetchCoordsForLocation(search.value)
@@ -74,7 +79,9 @@ const hourlyForecast = computed(() => {
 })
 
 const setPlace = async (result) => {
-  const { current, daily, hourly } = await fetchForecastForCoords(result.latitude, result.longitude)
+  selectedResult.value = result
+
+  const { current, daily, hourly } = await fetchForecastForCoords(result.latitude, result.longitude, isCelsius.value)
 
   place.value = {
     date: format(new Date(), 'EEEE, MMM d, yyyy'),
@@ -89,10 +96,26 @@ const setPlace = async (result) => {
     wind: current.wind_speed_10m,
   }
 }
+
+const switchUnits = async () => {
+  isCelsius.value = !isCelsius.value
+
+  await setPlace(selectedResult.value)
+}
 </script>
 
 <template>
   <div>
+    <nav class="flex gap-4">
+      <NuxtLink to="/">Weather Now</NuxtLink>
+      <div>
+        <p>Units</p>
+        <div>
+          <button v-if="isCelsius" type="button" @click="switchUnits">Switch to imperial</button>
+          <button v-else type="button" @click="switchUnits">Switch to metric</button>
+        </div>
+      </div>
+    </nav>
     <h1>How's the sky looking today?</h1>
     <form @submit.prevent="submit">
       <input v-model="search" type="text" class="text-black" placeholder="Search for a place..." />
@@ -143,7 +166,12 @@ const setPlace = async (result) => {
       </ul>
     </div>
     <div v-if="hourlyForecast.length">
-      <h2>Hourly forecast</h2>
+      <div>
+        <h2>Hourly forecast</h2>
+        <select v-model="selectedDay">
+          <option value="Tuesday">Tuesday</option>
+        </select>
+      </div>
       <ul>
         <li v-for="forecast in hourlyForecast" :key="forecast.time">
           <p>{{ forecast.time }}</p>
