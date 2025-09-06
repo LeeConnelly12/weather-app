@@ -52,6 +52,6 @@
 
 @layer base {
   body {
-    @apply min-h-screen bg-neutral-900 px-4 pb-12 pt-4 font-medium leading-5 text-white md:px-6 md:pt-6 lg:px-0 lg:pb-20 lg:pt-12;
+    @apply min-h-screen bg-neutral-900 px-4 pb-12 pt-4 font-medium leading-5 text-white md:px-6 md:pt-6 xl:px-0 xl:pb-20 xl:pt-12;
   }
 }
