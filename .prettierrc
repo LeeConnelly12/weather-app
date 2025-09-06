@@ -7,6 +7,7 @@
   "printWidth": 150,
   "plugins": ["prettier-plugin-organize-imports", "prettier-plugin-tailwindcss"],
   "tabWidth": 2,
+  "quoteProps": "consistent",
   "overrides": [
     {
       "files": "**/*.yml",

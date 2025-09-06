@@ -99,79 +99,108 @@ const switchUnits = async () => {
 
 <template>
   <div>
-    <nav class="flex gap-4">
-      <NuxtLink to="/">Weather Now</NuxtLink>
-      <div>
-        <p>Units</p>
-        <div>
-          <button v-if="isCelsius" type="button" @click="switchUnits">Switch to imperial</button>
-          <button v-else type="button" @click="switchUnits">Switch to metric</button>
+    <nav class="flex items-center justify-between lg:mx-auto lg:max-w-7xl">
+      <NuxtLink to="/">
+        <Logo class="w-[138px] md:w-[197px]" />
+      </NuxtLink>
+      <button type="button" class="flex items-center gap-[0.375rem] rounded-md bg-neutral-800 px-2.5 py-2 md:gap-2">
+        <img src="/images/icon-units.svg" alt="" width="16" height="16" />
+        <p class="text-sm">Units</p>
+        <img src="/images/icon-dropdown.svg" alt="" width="13" height="8" />
+      </button>
+    </nav>
+    <div class="mt-12 lg:mt-16">
+      <h1 class="font-bricolage-grotesque text-center text-6xl font-bold md:mx-auto md:max-w-lg lg:max-w-none">How's the sky looking today?</h1>
+      <form @submit.prevent="submit" class="mt-12 items-center md:grid md:grid-cols-[1fr_auto] md:gap-4 lg:mx-auto lg:mt-16 lg:max-w-2xl">
+        <div class="relative flex items-center">
+          <img class="pointer-events-none absolute left-6" src="/images/icon-search.svg" alt="" />
+          <input
+            v-model="search"
+            type="text"
+            placeholder="Search for a place..."
+            class="h-14 w-full rounded-xl bg-neutral-800 pl-[3.75rem] pr-6 text-white placeholder:text-neutral-200"
+          />
+          <ul v-if="false" class="absolute top-full z-10 mt-2 grid w-full gap-1 rounded-xl border border-neutral-700 bg-neutral-800 p-2">
+            <li v-for="result in results" :key="result.id" class="rounded-lg">
+              <button type="button" class="w-full p-2 text-left" @click="setPlace(result)">
+                {{ result.name }}
+              </button>
+            </li>
+          </ul>
+        </div>
+        <button type="submit" class="mt-3 h-14 w-full rounded-xl bg-blue-500 text-xl md:mt-0 md:px-6">Search</button>
+      </form>
+    </div>
+    <div v-if="place" class="lg:mx-auto lg:mt-12 lg:grid lg:max-w-7xl lg:grid-cols-[50rem_24rem] lg:gap-8">
+      <div class="mt-8 lg:mt-0 lg:grid lg:grid-rows-[auto_auto_1fr_auto]">
+        <div
+          class="bg-today-small md:bg-today-large h-[286px] w-full rounded-[1.25rem] bg-cover bg-no-repeat py-10 text-center md:flex md:items-center md:justify-between md:px-6 md:text-left"
+        >
+          <div>
+            <h2 class="text-3xl font-bold">{{ place.name }}</h2>
+            <p class="mt-3 text-lg opacity-80">{{ place.date }}</p>
+          </div>
+          <div class="mt-4 inline-flex items-center gap-5">
+            <WeatherCode :weatherCode="place.weatherCode" class="size-[120px]" />
+            <p class="text-8xl">{{ place.temperature }}</p>
+          </div>
+        </div>
+        <div class="mt-5 grid grid-cols-2 gap-4 md:grid-cols-4 lg:mt-8 lg:gap-6">
+          <div class="rounded-xl border border-neutral-600 bg-neutral-800 p-5">
+            <p class="text-lg text-neutral-200">Feels Like</p>
+            <p class="mt-6 text-4xl font-light">{{ place.feelsLike }}</p>
+          </div>
+          <div class="rounded-xl border border-neutral-600 bg-neutral-800 p-5">
+            <p class="text-lg text-neutral-200">Humidity</p>
+            <p class="mt-6 text-4xl font-light">{{ place.humidity }}</p>
+          </div>
+          <div class="rounded-xl border border-neutral-600 bg-neutral-800 p-5">
+            <p class="text-lg text-neutral-200">Wind</p>
+            <p class="mt-6 text-4xl font-light">{{ place.wind }}</p>
+          </div>
+          <div class="rounded-xl border border-neutral-600 bg-neutral-800 p-5">
+            <p class="text-lg text-neutral-200">Precipitation</p>
+            <p class="mt-6 text-4xl font-light">{{ place.precipitation }}</p>
+          </div>
+        </div>
+        <div v-if="dailyForecast.length" class="mt-8 lg:row-start-4 lg:mt-0">
+          <h2 class="text-xl font-semibold">Daily forecast</h2>
+          <ul class="mt-5 grid grid-cols-[repeat(auto-fit,minmax(89px,1fr))] gap-4">
+            <li
+              v-for="forecast in dailyForecast"
+              :key="forecast.day"
+              class="rounded-xl border border-neutral-600 bg-neutral-800 px-2.5 py-4 text-center"
+            >
+              <p class="text-lg">{{ forecast.day }}</p>
+              <WeatherCode :weatherCode="forecast.weatherCode" class="inline-block size-[60px] md:mt-4" />
+              <div class="flex justify-between md:mt-4">
+                <p>{{ forecast.min }}</p>
+                <p class="text-neutral-200">{{ forecast.max }}</p>
+              </div>
+            </li>
+          </ul>
         </div>
       </div>
-    </nav>
-    <h1>How's the sky looking today?</h1>
-    <form @submit.prevent="submit">
-      <input v-model="search" type="text" class="text-black" placeholder="Search for a place..." />
-      <button type="submit">Search</button>
-    </form>
-    <ul v-if="results.length">
-      <li v-for="result in results" :key="result.id">
-        <button type="button" @click="setPlace(result)">
-          {{ result.name }}
-        </button>
-      </li>
-    </ul>
-    <div v-if="place">
-      <div>
-        <h2>{{ place.name }}</h2>
-        <p>{{ place.date }}</p>
+      <div v-if="hourlyForecast.length" class="mt-8 rounded-xl bg-neutral-800 px-4 py-5 md:p-6 lg:mt-0">
+        <div class="flex items-center justify-between">
+          <h2 class="text-xl font-semibold">Hourly forecast</h2>
+          <button type="button" class="flex gap-[0.375rem] rounded-md bg-neutral-600 px-4 py-2">
+            <p>{{ selectedDay }}</p>
+            <img src="/images/icon-dropdown.svg" alt="" width="13" height="8" />
+          </button>
+        </div>
+        <ul>
+          <li
+            v-for="forecast in hourlyForecast"
+            :key="forecast.time"
+            class="mt-4 grid grid-cols-[auto_auto_1fr_auto] items-center gap-2 rounded-lg border border-neutral-600 bg-neutral-700 py-1.5 pl-3 pr-4"
+          >
+            <WeatherCode :weatherCode="forecast.weatherCode" class="size-[40px]" />
+            <p class="text-lg">{{ forecast.time }}</p>
+            <p class="col-start-4">{{ forecast.temperature }}</p>
+          </li>
+        </ul>
       </div>
-      <div>
-        <WeatherCode :weatherCode="place.weatherCode" />
-        <p>{{ place.temperature }}</p>
-      </div>
-      <div>
-        feels like
-        <div>{{ place.feelsLike }}</div>
-      </div>
-      <div>
-        humidity
-        <div>{{ place.humidity }}</div>
-      </div>
-      <div>
-        wind
-        <div>{{ place.wind }}</div>
-      </div>
-      <div>
-        precipitation
-        <div>{{ place.precipitation }}</div>
-      </div>
-    </div>
-    <div v-if="dailyForecast.length">
-      <h2>Daily forecast</h2>
-      <ul>
-        <li v-for="forecast in dailyForecast" :key="forecast.day">
-          <p>{{ forecast.day }}</p>
-          <WeatherCode :weatherCode="forecast.weatherCode" />
-          <p>{{ forecast.min }}</p>
-          <p>{{ forecast.max }}</p>
-        </li>
-      </ul>
-    </div>
-    <div v-if="hourlyForecast.length">
-      <div>
-        <h2>Hourly forecast</h2>
-        <select v-model="selectedDay">
-          <option value="Tuesday">Tuesday</option>
-        </select>
-      </div>
-      <ul>
-        <li v-for="forecast in hourlyForecast" :key="forecast.time">
-          <p>{{ forecast.time }}</p>
-          <WeatherCode :weatherCode="forecast.weatherCode" />
-          <p>{{ forecast.temperature }}</p>
-        </li>
-      </ul>
     </div>
   </div>
 </template>

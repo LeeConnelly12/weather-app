@@ -4,8 +4,52 @@ import defaultTheme from 'tailwindcss/defaultTheme'
 export default <Partial<Config>>{
   theme: {
     extend: {
+      backgroundImage: {
+        'today-small': "url('/images/bg-today-small.svg')",
+        'today-large': "url('/images/bg-today-large.svg')",
+      },
       fontFamily: {
-        sans: ['DM Sans', ...defaultTheme.fontFamily.sans],
+        'sans': ['DM Sans', ...defaultTheme.fontFamily.sans],
+        'bricolage-grotesque': ['Bricolage Grotesque', ...defaultTheme.fontFamily.sans],
+      },
+      fontSize: {
+        'lg': [
+          '1.125rem',
+          {
+            lineHeight: '1.2',
+          },
+        ],
+        'xl': [
+          '1.25rem',
+          {
+            lineHeight: '1.2',
+          },
+        ],
+        '3xl': '1.75rem',
+        '4xl': [
+          '2rem',
+          {
+            lineHeight: '1',
+          },
+        ],
+        '6xl': '3.25rem',
+        '8xl': [
+          '6rem',
+          {
+            lineHeight: '1',
+          },
+        ],
+      },
+      lineHeight: {
+        '5': '1.2',
+      },
+      padding: {
+        '1.5': '0.375rem',
+        '2.5': '0.625rem',
+      },
+      maxWidth: {
+        '2xl': '41rem',
+        '7xl': '76rem',
       },
       colors: {
         neutral: {

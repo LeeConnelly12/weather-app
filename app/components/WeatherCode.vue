@@ -36,5 +36,5 @@ const path = {
 </script>
 
 <template>
-  <img :src="`/images/icon-${path[weatherCode]}.webp`" alt="" />
+  <img :src="`/images/icon-${path[weatherCode]}.webp`" alt="" width="320" height="320" />
 </template>
