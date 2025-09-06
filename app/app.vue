@@ -99,6 +99,8 @@ const setPlace = async (result) => {
     wind: current.wind_speed_10m,
   }
 
+  search.value = ''
+
   showResults.value = false
 }
 
