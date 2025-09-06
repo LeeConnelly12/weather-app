@@ -39,10 +39,10 @@ const switchUnits = () => {
       ref="ignoreElRef"
       @click="open = !open"
       type="button"
-      class="flex items-center gap-1.5 rounded-md bg-neutral-800 px-2.5 py-2 outline-none focus:outline-2 focus:outline-white md:gap-2"
+      class="flex items-center gap-1.5 rounded-md bg-neutral-800 px-2.5 py-2 text-sm outline-none focus:outline-2 focus:outline-white md:gap-2"
     >
       <Units />
-      <p class="text-sm">Units</p>
+      Units
       <Chevron :class="{ 'rotate-180': open }" />
     </button>
     <ul
@@ -62,79 +62,85 @@ const switchUnits = () => {
         </button>
       </li>
       <li class="mt-2.5">
-        <p class="pl-2 text-sm text-neutral-300">Temperature</p>
-        <label
-          @keydown.enter.prevent="preferences.temperature = 'metric'"
-          @keydown.space.prevent="preferences.temperature = 'metric'"
-          tabindex="0"
-          class="oultine-none mt-2 flex cursor-pointer items-center justify-between rounded-lg px-2 py-2.5 text-left outline-none hover:bg-neutral-700 focus:outline-2 focus:outline-white"
-          :class="{ 'bg-neutral-700': preferences.temperature === 'metric' }"
-        >
-          <input v-model="preferences.temperature" type="radio" class="hidden" value="metric" />
-          Celsius (°C)
-          <CheckMark v-if="preferences.temperature === 'metric'" />
-        </label>
-        <label
-          @keydown.enter.prevent="preferences.temperature = 'imperial'"
-          @keydown.space.prevent="preferences.temperature = 'imperial'"
-          tabindex="0"
-          class="mt-1.5 flex cursor-pointer items-center justify-between rounded-lg px-2 py-2.5 text-left outline-none hover:bg-neutral-700 focus:outline-2 focus:outline-white"
-          :class="{ 'bg-neutral-700': preferences.temperature === 'imperial' }"
-        >
-          <input v-model="preferences.temperature" type="radio" class="hidden" value="imperial" />
-          Fahrenheit (°F)
-          <CheckMark v-if="preferences.temperature === 'imperial'" />
-        </label>
+        <fieldset>
+          <legend class="pl-2 text-sm text-neutral-300">Temperature</legend>
+          <label
+            @keydown.enter.prevent="preferences.temperature = 'metric'"
+            @keydown.space.prevent="preferences.temperature = 'metric'"
+            tabindex="0"
+            class="oultine-none mt-2 flex cursor-pointer items-center justify-between rounded-lg px-2 py-2.5 text-left outline-none hover:bg-neutral-700 focus:outline-2 focus:outline-white"
+            :class="{ 'bg-neutral-700': preferences.temperature === 'metric' }"
+          >
+            <input v-model="preferences.temperature" type="radio" name="temperature" class="hidden" value="metric" />
+            Celsius (°C)
+            <CheckMark v-if="preferences.temperature === 'metric'" />
+          </label>
+          <label
+            @keydown.enter.prevent="preferences.temperature = 'imperial'"
+            @keydown.space.prevent="preferences.temperature = 'imperial'"
+            tabindex="0"
+            class="mt-1.5 flex cursor-pointer items-center justify-between rounded-lg px-2 py-2.5 text-left outline-none hover:bg-neutral-700 focus:outline-2 focus:outline-white"
+            :class="{ 'bg-neutral-700': preferences.temperature === 'imperial' }"
+          >
+            <input v-model="preferences.temperature" type="radio" name="temperature" class="hidden" value="imperial" />
+            Fahrenheit (°F)
+            <CheckMark v-if="preferences.temperature === 'imperial'" />
+          </label>
+        </fieldset>
       </li>
       <li class="mt-1 border-t border-t-neutral-600 pt-2.5">
-        <p class="pl-2 text-sm text-neutral-300">Wind Speed</p>
-        <label
-          @keydown.enter.prevent="preferences.windSpeed = 'metric'"
-          @keydown.space.prevent="preferences.windSpeed = 'metric'"
-          tabindex="0"
-          class="mt-2 flex cursor-pointer items-center justify-between rounded-lg px-2 py-2.5 text-left outline-none hover:bg-neutral-700 focus:outline-2 focus:outline-white"
-          :class="{ 'bg-neutral-700': preferences.windSpeed === 'metric' }"
-        >
-          <input v-model="preferences.windSpeed" type="radio" class="hidden" value="metric" />
-          km/h
-          <CheckMark v-if="preferences.windSpeed === 'metric'" />
-        </label>
-        <label
-          @keydown.enter.prevent="preferences.windSpeed = 'imperial'"
-          @keydown.space.prevent="preferences.windSpeed = 'imperial'"
-          tabindex="0"
-          class="mt-1.5 flex cursor-pointer items-center justify-between rounded-lg px-2 py-2.5 text-left outline-none hover:bg-neutral-700 focus:outline-2 focus:outline-white"
-          :class="{ 'bg-neutral-700': preferences.windSpeed === 'imperial' }"
-        >
-          <input v-model="preferences.windSpeed" type="radio" class="hidden" value="imperial" />
-          mph
-          <CheckMark v-if="preferences.windSpeed === 'imperial'" />
-        </label>
+        <fieldset>
+          <legend class="pl-2 text-sm text-neutral-300">Wind Speed</legend>
+          <label
+            @keydown.enter.prevent="preferences.windSpeed = 'metric'"
+            @keydown.space.prevent="preferences.windSpeed = 'metric'"
+            tabindex="0"
+            class="mt-2 flex cursor-pointer items-center justify-between rounded-lg px-2 py-2.5 text-left outline-none hover:bg-neutral-700 focus:outline-2 focus:outline-white"
+            :class="{ 'bg-neutral-700': preferences.windSpeed === 'metric' }"
+          >
+            <input v-model="preferences.windSpeed" type="radio" name="windSpeed" class="hidden" value="metric" />
+            km/h
+            <CheckMark v-if="preferences.windSpeed === 'metric'" />
+          </label>
+          <label
+            @keydown.enter.prevent="preferences.windSpeed = 'imperial'"
+            @keydown.space.prevent="preferences.windSpeed = 'imperial'"
+            tabindex="0"
+            class="mt-1.5 flex cursor-pointer items-center justify-between rounded-lg px-2 py-2.5 text-left outline-none hover:bg-neutral-700 focus:outline-2 focus:outline-white"
+            :class="{ 'bg-neutral-700': preferences.windSpeed === 'imperial' }"
+          >
+            <input v-model="preferences.windSpeed" type="radio" name="windSpeed" class="hidden" value="imperial" />
+            mph
+            <CheckMark v-if="preferences.windSpeed === 'imperial'" />
+          </label>
+        </fieldset>
       </li>
       <li class="mt-1 border-t border-t-neutral-600 pt-2.5">
-        <p class="pl-2 text-sm text-neutral-300">Precipitation</p>
-        <label
-          @keydown.enter.prevent="preferences.precipitation = 'metric'"
-          @keydown.space.prevent="preferences.precipitation = 'metric'"
-          tabindex="0"
-          class="mt-2 flex cursor-pointer items-center justify-between rounded-lg px-2 py-2.5 text-left outline-none hover:bg-neutral-700 focus:outline-2 focus:outline-white"
-          :class="{ 'bg-neutral-700': preferences.precipitation === 'metric' }"
-        >
-          <input v-model="preferences.precipitation" type="radio" class="hidden" value="metric" />
-          Millimeters (mm)
-          <CheckMark v-if="preferences.precipitation === 'metric'" />
-        </label>
-        <label
-          @keydown.enter.prevent="preferences.precipitation = 'imperial'"
-          @keydown.space.prevent="preferences.precipitation = 'imperial'"
-          tabindex="0"
-          class="mt-1.5 flex cursor-pointer items-center justify-between rounded-lg px-2 py-2.5 text-left outline-none hover:bg-neutral-700 focus:outline-2 focus:outline-white"
-          :class="{ 'bg-neutral-700': preferences.precipitation === 'imperial' }"
-        >
-          <input v-model="preferences.precipitation" type="radio" class="hidden" value="imperial" />
-          Inches (in)
-          <CheckMark v-if="preferences.precipitation === 'imperial'" />
-        </label>
+        <fieldset>
+          <legend class="pl-2 text-sm text-neutral-300">Precipitation</legend>
+          <label
+            @keydown.enter.prevent="preferences.precipitation = 'metric'"
+            @keydown.space.prevent="preferences.precipitation = 'metric'"
+            tabindex="0"
+            class="mt-2 flex cursor-pointer items-center justify-between rounded-lg px-2 py-2.5 text-left outline-none hover:bg-neutral-700 focus:outline-2 focus:outline-white"
+            :class="{ 'bg-neutral-700': preferences.precipitation === 'metric' }"
+          >
+            <input v-model="preferences.precipitation" type="radio" name="precipitation" class="hidden" value="metric" />
+            Millimeters (mm)
+            <CheckMark v-if="preferences.precipitation === 'metric'" />
+          </label>
+          <label
+            @keydown.enter.prevent="preferences.precipitation = 'imperial'"
+            @keydown.space.prevent="preferences.precipitation = 'imperial'"
+            tabindex="0"
+            class="mt-1.5 flex cursor-pointer items-center justify-between rounded-lg px-2 py-2.5 text-left outline-none hover:bg-neutral-700 focus:outline-2 focus:outline-white"
+            :class="{ 'bg-neutral-700': preferences.precipitation === 'imperial' }"
+          >
+            <input v-model="preferences.precipitation" type="radio" name="precipitation" class="hidden" value="imperial" />
+            Inches (in)
+            <CheckMark v-if="preferences.precipitation === 'imperial'" />
+          </label>
+        </fieldset>
       </li>
     </ul>
   </div>
