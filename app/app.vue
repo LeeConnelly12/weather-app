@@ -205,19 +205,13 @@ const setPlace = async (result) => {
       <div v-if="hourlyForecast.length" class="mt-8 rounded-xl bg-neutral-800 px-4 py-5 md:p-6 xl:mt-0">
         <div class="flex items-center justify-between">
           <h2 class="text-xl font-semibold">Hourly forecast</h2>
-          <button
-            type="button"
-            class="flex items-center gap-1.5 rounded-md bg-neutral-600 px-4 py-2 outline-none focus:outline-2 focus:outline-white"
-          >
-            <p>{{ selectedDay }}</p>
-            <Chevron />
-          </button>
+          <DayDropdown v-model="selectedDay" />
         </div>
         <ul class="mt-4 space-y-4">
           <li
             v-for="forecast in hourlyForecast"
             :key="forecast.time"
-            class="grid grid-cols-[auto_auto_1fr_auto] items-center gap-2 rounded-lg border border-neutral-600 bg-neutral-700 py-1.5 pl-3 pr-4"
+            class="grid grid-cols-[auto_auto_1fr_auto] items-center gap-2 rounded-lg border border-neutral-600 bg-neutral-700 py-2.5 pl-3 pr-4"
           >
             <WeatherCode :weatherCode="forecast.weatherCode" class="size-10" />
             <p class="text-lg">{{ forecast.time }}</p>
