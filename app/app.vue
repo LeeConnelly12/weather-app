@@ -91,12 +91,18 @@ const setPlace = async (result) => {
     dailyForecast: daily,
     hourlyForecast: hourly,
     feelsLike: Math.round(current.apparent_temperature) + '°',
-    humidity: current.relative_humidity_2m,
+    humidity: current.relative_humidity_2m + '%',
     name: result.name,
-    precipitation: current.precipitation,
+    precipitation:
+      preferences.value.isMetric || preferences.value.precipitation === 'metric'
+        ? Math.round(current.precipitation) + ' mm'
+        : Math.round(current.precipitation / 25.4) + ' in',
     temperature: Math.round(current.temperature_2m) + '°',
     weatherCode: current.weather_code,
-    wind: current.wind_speed_10m,
+    wind:
+      preferences.value.isMetric || preferences.value.windSpeed === 'metric'
+        ? Math.round(current.wind_speed_10m * 3.6) + ' km/h'
+        : Math.round(current.wind_speed_10m * 2.23694) + ' mph',
   }
 
   search.value = ''
@@ -153,7 +159,7 @@ const setPlace = async (result) => {
       </form>
     </div>
     <div v-if="place" class="xl:mx-auto xl:mt-12 xl:grid xl:max-w-7xl xl:grid-cols-[50rem_24rem] xl:gap-8">
-      <div class="mt-8 xl:mt-0 xl:grid xl:grid-rows-[auto_auto_1fr_auto]">
+      <div class="mt-8 xl:mt-0">
         <div
           class="h-[286px] w-full rounded-[1.25rem] bg-today-small bg-cover bg-no-repeat py-10 text-center md:flex md:items-center md:justify-between md:bg-today-large md:px-6 md:text-left"
         >
@@ -184,7 +190,7 @@ const setPlace = async (result) => {
             <p class="mt-6 text-4xl font-light">{{ place.precipitation }}</p>
           </div>
         </div>
-        <div v-if="dailyForecast.length" class="mt-8 xl:row-start-4 xl:mt-0">
+        <div v-if="dailyForecast.length" class="mt-8 xl:mt-[3.75rem]">
           <h2 class="text-xl font-semibold">Daily forecast</h2>
           <ul class="mt-5 grid grid-cols-[repeat(auto-fit,minmax(89px,1fr))] gap-4">
             <li
