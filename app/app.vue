@@ -15,10 +15,14 @@ const currentTime = new Date()
 
 const selectedResult = useState('selectedResult', () => null)
 
+const showResults = useState('showResults', () => false)
+
 const submit = async () => {
   const response = await fetchCoordsForLocation(search.value)
 
   results.value = response.results
+
+  showResults.value = true
 }
 
 const dailyForecast = computed(() => {
@@ -88,6 +92,8 @@ const setPlace = async (result) => {
     weatherCode: current.weather_code,
     wind: current.wind_speed_10m,
   }
+
+  showResults.value = false
 }
 
 const switchUnits = async () => {
@@ -100,10 +106,11 @@ const switchUnits = async () => {
 <template>
   <div>
     <nav class="flex items-center justify-between lg:mx-auto lg:max-w-7xl">
-      <NuxtLink to="/">
-        <Logo class="w-[138px] md:w-[197px]" />
-      </NuxtLink>
-      <button type="button" class="flex items-center gap-[0.375rem] rounded-md bg-neutral-800 px-2.5 py-2 md:gap-2">
+      <Logo class="w-[138px] md:w-[197px]" />
+      <button
+        type="button"
+        class="flex items-center gap-[0.375rem] rounded-md bg-neutral-800 px-2.5 py-2 outline-none focus:outline-2 focus:outline-white md:gap-2"
+      >
         <img src="/images/icon-units.svg" alt="" width="16" height="16" />
         <p class="text-sm">Units</p>
         <img src="/images/icon-dropdown.svg" alt="" width="13" height="8" />
@@ -118,17 +125,30 @@ const switchUnits = async () => {
             v-model="search"
             type="text"
             placeholder="Search for a place..."
-            class="h-14 w-full rounded-xl bg-neutral-800 pl-[3.75rem] pr-6 text-white placeholder:text-neutral-200"
+            class="h-14 w-full rounded-xl bg-neutral-800 pl-[3.75rem] pr-6 text-white outline-none placeholder:text-neutral-200 focus:outline-2 focus:outline-white"
           />
-          <ul v-if="results.length" class="absolute top-full z-10 mt-2 grid w-full gap-1 rounded-xl border border-neutral-700 bg-neutral-800 p-2">
-            <li v-for="result in results" :key="result.id" class="rounded-lg">
-              <button type="button" class="w-full p-2 text-left" @click="setPlace(result)">
+          <ul
+            v-if="showResults"
+            class="absolute top-full z-10 mt-2 grid max-h-44 w-full gap-1 overflow-y-auto rounded-xl border border-neutral-700 bg-neutral-800 p-2"
+            tabindex="-1"
+          >
+            <li v-for="result in results" :key="result.id">
+              <button
+                type="button"
+                class="w-full rounded-lg border border-transparent p-2 text-left outline-none hover:border-neutral-600 hover:bg-neutral-700 focus:border-neutral-600 focus:bg-neutral-700 focus:outline-2 focus:outline-white"
+                @click="setPlace(result)"
+              >
                 {{ result.name }}
               </button>
             </li>
           </ul>
         </div>
-        <button type="submit" class="mt-3 h-14 w-full rounded-xl bg-blue-500 text-xl md:mt-0 md:px-6">Search</button>
+        <button
+          type="submit"
+          class="mt-3 h-14 w-full rounded-xl bg-blue-500 text-xl outline-none hover:bg-blue-700 focus:outline-2 focus:outline-blue-500 md:mt-0 md:px-6"
+        >
+          Search
+        </button>
       </form>
     </div>
     <div v-if="place" class="lg:mx-auto lg:mt-12 lg:grid lg:max-w-7xl lg:grid-cols-[50rem_24rem] lg:gap-8">
@@ -184,7 +204,7 @@ const switchUnits = async () => {
       <div v-if="hourlyForecast.length" class="mt-8 rounded-xl bg-neutral-800 px-4 py-5 md:p-6 lg:mt-0">
         <div class="flex items-center justify-between">
           <h2 class="text-xl font-semibold">Hourly forecast</h2>
-          <button type="button" class="flex gap-[0.375rem] rounded-md bg-neutral-600 px-4 py-2">
+          <button type="button" class="flex gap-[0.375rem] rounded-md bg-neutral-600 px-4 py-2 outline-none focus:outline-2 focus:outline-white">
             <p>{{ selectedDay }}</p>
             <img src="/images/icon-dropdown.svg" alt="" width="13" height="8" />
           </button>
