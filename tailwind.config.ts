@@ -13,6 +13,12 @@ export default <Partial<Config>>{
         'bricolage-grotesque': ['Bricolage Grotesque', ...defaultTheme.fontFamily.sans],
       },
       fontSize: {
+        'sm': [
+          '0.875rem',
+          {
+            lineHeight: '1.2',
+          },
+        ],
         'lg': [
           '1.125rem',
           {
@@ -43,13 +49,13 @@ export default <Partial<Config>>{
       lineHeight: {
         '5': '1.2',
       },
-      padding: {
-        '1.5': '0.375rem',
-        '2.5': '0.625rem',
-      },
       maxWidth: {
         '2xl': '41rem',
         '7xl': '76rem',
+      },
+      spacing: {
+        '1.5': '0.375rem',
+        '2.5': '0.625rem',
       },
       colors: {
         neutral: {

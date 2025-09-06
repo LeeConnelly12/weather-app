@@ -9,7 +9,7 @@ const place = useState('place', () => null)
 
 const selectedDay = useState('selectedDay', () => format(new Date(), 'EEEE'))
 
-const isCelsius = useState('isCelsius', () => true)
+const preferences = useCookie('preferences')
 
 const currentTime = new Date()
 
@@ -84,7 +84,7 @@ const hourlyForecast = computed(() => {
 const setPlace = async (result) => {
   selectedResult.value = result
 
-  const { current, daily, hourly } = await fetchForecastForCoords(result.latitude, result.longitude, isCelsius.value)
+  const { current, daily, hourly } = await fetchForecastForCoords(result.latitude, result.longitude, preferences.value.isMetric)
 
   place.value = {
     date: format(new Date(), 'EEEE, MMM d, yyyy'),
@@ -103,26 +103,13 @@ const setPlace = async (result) => {
 
   showResults.value = false
 }
-
-const switchUnits = async () => {
-  isCelsius.value = !isCelsius.value
-
-  await setPlace(selectedResult.value)
-}
 </script>
 
 <template>
   <div>
     <nav class="flex items-center justify-between xl:mx-auto xl:max-w-7xl">
       <Logo class="w-[138px] md:w-[197px]" />
-      <button
-        type="button"
-        class="flex items-center gap-[0.375rem] rounded-md bg-neutral-800 px-2.5 py-2 outline-none focus:outline-2 focus:outline-white md:gap-2"
-      >
-        <Units />
-        <p class="text-sm">Units</p>
-        <Chevron />
-      </button>
+      <UnitsDropdown />
     </nav>
     <div class="mt-12 xl:mt-16">
       <h1 class="text-center font-bricolage-grotesque text-6xl font-bold md:mx-auto md:max-w-lg xl:max-w-none">How's the sky looking today?</h1>
@@ -220,7 +207,7 @@ const switchUnits = async () => {
           <h2 class="text-xl font-semibold">Hourly forecast</h2>
           <button
             type="button"
-            class="flex items-center gap-[0.375rem] rounded-md bg-neutral-600 px-4 py-2 outline-none focus:outline-2 focus:outline-white"
+            class="flex items-center gap-1.5 rounded-md bg-neutral-600 px-4 py-2 outline-none focus:outline-2 focus:outline-white"
           >
             <p>{{ selectedDay }}</p>
             <Chevron />
@@ -232,7 +219,7 @@ const switchUnits = async () => {
             :key="forecast.time"
             class="grid grid-cols-[auto_auto_1fr_auto] items-center gap-2 rounded-lg border border-neutral-600 bg-neutral-700 py-1.5 pl-3 pr-4"
           >
-            <WeatherCode :weatherCode="forecast.weatherCode" class="size-[40px]" />
+            <WeatherCode :weatherCode="forecast.weatherCode" class="size-10" />
             <p class="text-lg">{{ forecast.time }}</p>
             <p class="col-start-4">{{ forecast.temperature }}</p>
           </li>
