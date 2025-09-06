@@ -120,7 +120,7 @@ const switchUnits = async () => {
             placeholder="Search for a place..."
             class="h-14 w-full rounded-xl bg-neutral-800 pl-[3.75rem] pr-6 text-white placeholder:text-neutral-200"
           />
-          <ul v-if="false" class="absolute top-full z-10 mt-2 grid w-full gap-1 rounded-xl border border-neutral-700 bg-neutral-800 p-2">
+          <ul v-if="results.length" class="absolute top-full z-10 mt-2 grid w-full gap-1 rounded-xl border border-neutral-700 bg-neutral-800 p-2">
             <li v-for="result in results" :key="result.id" class="rounded-lg">
               <button type="button" class="w-full p-2 text-left" @click="setPlace(result)">
                 {{ result.name }}
