@@ -1,9 +1,10 @@
 <script setup>
-import { format } from 'date-fns'
+import { addHours, format, startOfHour } from 'date-fns'
 
 const search = useState('search', () => '')
 const results = useState('results', () => [])
 const place = useState('place', () => null)
+const currentTime = new Date()
 const selectedDay = useState('selectedDay', () => format(new Date(), 'EEEE'))
 const preferences = useCookie('preferences')
 const loadingResults = useState('loadingResults', () => false)
@@ -11,7 +12,6 @@ const showResults = useState('showResults', () => false)
 
 const daily = useState('daily', () => null)
 const hourly = useState('hourly', () => null)
-const { dailyForecast, hourlyForecast } = useForecast(daily, hourly, selectedDay)
 
 const submit = async () => {
   loadingResults.value = true
@@ -24,6 +24,52 @@ const submit = async () => {
 
   results.value = response.results
 }
+
+const dailyForecast = computed(() => {
+  if (!daily.value?.time) {
+    return []
+  }
+
+  return daily.value.time.map((date) => {
+    const index = daily.value.time.indexOf(date)
+
+    return {
+      day: format(date, 'EEE'),
+      min: Math.round(daily.value.temperature_2m_min[index]) + '°',
+      max: Math.round(daily.value.temperature_2m_max[index]) + '°',
+      weatherCode: daily.value.weather_code[index],
+    }
+  })
+})
+
+const hourlyForecast = computed(() => {
+  if (!hourly.value?.time) {
+    return []
+  }
+
+  const startTime = startOfHour(currentTime)
+  const endTime = addHours(currentTime, 8)
+
+  return hourly.value.time
+    .filter((date) => {
+      const forecastDate = new Date(date)
+
+      if (format(forecastDate, 'EEEE') !== selectedDay.value) {
+        return false
+      }
+
+      return forecastDate >= startTime && forecastDate <= endTime
+    })
+    .map((date) => {
+      const index = hourly.value.time.indexOf(date)
+
+      return {
+        temperature: Math.round(hourly.value.temperature_2m[index]) + '°',
+        time: format(date, 'h a'),
+        weatherCode: hourly.value.weather_code[index],
+      }
+    })
+})
 
 const setPlace = async (result) => {
   const response = await fetchForecastForCoords(result.latitude, result.longitude, preferences.value.isMetric)
