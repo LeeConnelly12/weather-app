@@ -31,6 +31,7 @@ watch(selectedDay, () => (open.value = false))
       @click="open = !open"
       type="button"
       class="flex items-center gap-1.5 rounded-md bg-neutral-600 px-4 py-2 outline-none focus:outline-2 focus:outline-white"
+      :aria-expanded="open"
     >
       {{ loading ? '&ndash;' : selectedDay }}
       <IconChevron :class="{ 'rotate-180': open }" />

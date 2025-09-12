@@ -1,5 +1,5 @@
 <template>
-  <svg class="inline-block fill-neutral-200" width="64" fill="none" viewBox="0 0 32 24">
+  <svg class="inline-block fill-neutral-200" width="64" fill="none" viewBox="0 0 32 24" aria-hidden="true">
     <circle cx="6" cy="12" r="3">
       <animate
         id="spinner_qFRN"

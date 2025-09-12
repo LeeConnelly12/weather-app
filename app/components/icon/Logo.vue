@@ -1,5 +1,5 @@
 <template>
-  <svg width="197" height="40" viewBox="0 0 197 40" fill="none">
+  <svg width="197" height="40" viewBox="0 0 197 40" fill="none" aria-hidden="true">
     <g clip-path="url(#a)">
       <path
         fill="#FF820A"
