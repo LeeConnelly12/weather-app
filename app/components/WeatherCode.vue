@@ -33,8 +33,19 @@ const path = {
   99: 'storm',
   0: 'sunny',
 }
+
+const altText = {
+  'drizzle': 'Drizzle',
+  'fog': 'Fog',
+  'overcast': 'Overcast',
+  'partly-cloudy': 'Partly cloudy',
+  'rain': 'Rain',
+  'snow': 'Snow',
+  'storm': 'Storm',
+  'sunny': 'Sunny',
+}
 </script>
 
 <template>
-  <img :src="`/images/icon-${path[weatherCode]}.webp`" alt="" width="320" height="320" />
+  <img :src="`/images/icon-${path[weatherCode]}.webp`" :alt="altText[path[weatherCode]]" width="320" height="320" />
 </template>
