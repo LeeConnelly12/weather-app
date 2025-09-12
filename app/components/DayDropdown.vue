@@ -7,6 +7,10 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  loading: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
@@ -28,7 +32,7 @@ watch(selectedDay, () => (open.value = false))
       type="button"
       class="flex items-center gap-1.5 rounded-md bg-neutral-600 px-4 py-2 outline-none focus:outline-2 focus:outline-white"
     >
-      {{ selectedDay }}
+      {{ loading ? '&ndash;' : selectedDay }}
       <Chevron :class="{ 'rotate-180': open }" />
     </button>
     <ul

@@ -1,3 +1,5 @@
+@import 'custom-pulse';
+
 @font-face {
   font-family: 'DM Sans';
   src: url('/fonts/dm-sans-light.woff2') format('woff2');

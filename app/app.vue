@@ -3,15 +3,15 @@ import { format, getHours, startOfHour } from 'date-fns'
 
 const search = useState('search', () => '')
 const results = useState('results', () => [])
-const place = useState('place', () => null)
-const currentTime = new Date()
-const selectedDay = useState('selectedDay', () => format(new Date(), 'EEEE'))
-
-const preferences = usePreferencesCookie()
-
 const loadingResults = useState('loadingResults', () => false)
 const showResults = useState('showResults', () => false)
 const activeResult = useState('activeResult', () => null)
+
+const place = useState('place', () => null)
+const loadingPlace = useState('loadingPlace', () => false)
+const selectedDay = useState('selectedDay', () => format(new Date(), 'EEEE'))
+
+const preferences = usePreferencesCookie()
 
 const daily = useState('daily', () => null)
 const hourly = useState('hourly', () => null)
@@ -50,7 +50,7 @@ const hourlyForecast = computed(() => {
     return []
   }
 
-  const startTime = startOfHour(currentTime)
+  const startTime = startOfHour(new Date())
 
   return hourly.value.time
     .filter((date) => {
@@ -83,7 +83,16 @@ const hourlyForecast = computed(() => {
 const setPlace = async (result) => {
   activeResult.value = result
 
+  search.value = ''
+
+  showResults.value = false
+
+  loadingPlace.value = true
+
   const response = await fetchForecastForCoords(result.latitude, result.longitude)
+
+  loadingPlace.value = false
+
   const current = response.current
   daily.value = response.daily
   hourly.value = response.hourly
@@ -103,10 +112,6 @@ const setPlace = async (result) => {
       ? Math.round(current.wind_speed_10m * 2.23694) + ' mph'
       : Math.round(current.wind_speed_10m * 3.6) + ' km/h',
   }
-
-  search.value = ''
-
-  showResults.value = false
 }
 
 watch(
@@ -176,7 +181,7 @@ watch(
         </button>
       </form>
     </section>
-    <div v-if="place" class="xl:mx-auto xl:mt-12 xl:grid xl:max-w-7xl xl:grid-cols-[50rem_24rem] xl:gap-8">
+    <div v-if="place && !loadingPlace" class="xl:mx-auto xl:mt-12 xl:grid xl:max-w-7xl xl:grid-cols-[50rem_24rem] xl:gap-8">
       <div class="mt-8 xl:mt-0">
         <section
           class="h-[286px] w-full rounded-[1.25rem] bg-today-small bg-cover bg-no-repeat py-10 text-center md:flex md:items-center md:justify-between md:bg-today-large md:px-6 md:text-left"
@@ -214,7 +219,7 @@ watch(
             <li
               v-for="forecast in dailyForecast"
               :key="forecast.day"
-              class="rounded-xl border border-neutral-600 bg-neutral-800 px-2.5 py-4 text-center"
+              class="h-[167px] rounded-xl border border-neutral-600 bg-neutral-800 px-2.5 py-4 text-center"
             >
               <p class="text-lg">{{ forecast.day }}</p>
               <WeatherCode :weatherCode="forecast.weatherCode" class="inline-block md:mt-4" width="60" height="60" />
@@ -243,6 +248,49 @@ watch(
           </li>
         </ul>
       </section>
+    </div>
+    <div v-else-if="loadingPlace" class="xl:mx-auto xl:mt-12 xl:grid xl:max-w-7xl xl:grid-cols-[50rem_24rem] xl:gap-8">
+      <div class="mt-8 xl:mt-0">
+        <div class="grid h-[286px] place-items-center rounded-[1.25rem] bg-neutral-800 text-center">
+          <div>
+            <Loading />
+            <p class="text-lg text-neutral-200">Loading...</p>
+          </div>
+        </div>
+        <div class="mt-5 grid grid-cols-2 gap-4 md:grid-cols-4 xl:mt-8 xl:gap-6">
+          <div class="rounded-xl border border-neutral-600 bg-neutral-800 p-5">
+            <p class="text-lg text-neutral-200">Feels Like</p>
+            <p class="mt-6 text-4xl font-light">&ndash;</p>
+          </div>
+          <div class="rounded-xl border border-neutral-600 bg-neutral-800 p-5">
+            <p class="text-lg text-neutral-200">Humidity</p>
+            <p class="mt-6 text-4xl font-light">&ndash;</p>
+          </div>
+          <div class="rounded-xl border border-neutral-600 bg-neutral-800 p-5">
+            <p class="text-lg text-neutral-200">Wind</p>
+            <p class="mt-6 text-4xl font-light">&ndash;</p>
+          </div>
+          <div class="rounded-xl border border-neutral-600 bg-neutral-800 p-5">
+            <p class="text-lg text-neutral-200">Precipitation</p>
+            <p class="mt-6 text-4xl font-light">&ndash;</p>
+          </div>
+        </div>
+        <div class="mt-8 xl:mt-[3.75rem]">
+          <h2 class="text-xl font-semibold">Daily forecast</h2>
+          <ul class="mt-5 grid grid-cols-[repeat(auto-fit,minmax(89px,1fr))] gap-4">
+            <li v-for="day in 7" :key="day" class="h-[167px] rounded-xl border border-neutral-600 bg-neutral-800 px-2.5 py-4 text-center"></li>
+          </ul>
+        </div>
+      </div>
+      <div class="mt-8 max-h-[709px] overflow-y-scroll rounded-xl bg-neutral-800 px-4 pb-5 md:px-6 md:pb-6 xl:mt-0">
+        <div class="sticky top-0 flex items-center justify-between bg-neutral-800 pb-4 pt-5 md:pt-6">
+          <h2 class="text-xl font-semibold">Hourly forecast</h2>
+          <DayDropdown v-model="selectedDay" :loading="true" />
+        </div>
+        <div class="space-y-4">
+          <Skeleton v-for="hour in 8" :key="hour" class="h-[62px] rounded-lg border border-neutral-600 bg-neutral-700 py-2.5 pl-3 pr-4" />
+        </div>
+      </div>
     </div>
   </main>
 </template>
