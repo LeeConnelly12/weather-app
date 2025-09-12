@@ -12,18 +12,27 @@ export async function fetchCoordsForLocation(location: string) {
   return data.value
 }
 
-export async function fetchForecastForCoords(latitude: number, longitude: number, isMetric: boolean) {
+export async function fetchForecastForCoords(latitude: number, longitude: number) {
+  const preferences = useCookie('preferences')
+
   const url = 'https://api.open-meteo.com/v1/forecast'
 
+  // prettier-ignore
   const params = {
     latitude: latitude,
     longitude: longitude,
     daily: 'temperature_2m_min,temperature_2m_max,weather_code',
     current: 'temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,precipitation,weather_code',
     hourly: 'weather_code,temperature_2m,precipitation',
-    temperature_unit: isMetric ? 'celsius' : 'fahrenheit',
-    wind_speed_unit: isMetric ? 'kmh' : 'mph',
-    precipitation_unit: isMetric ? 'mm' : 'inch',
+    temperature_unit: preferences.value.temperature === 'imperial'
+      ? 'fahrenheit'
+      : 'celsius',
+    wind_speed_unit: preferences.value.windSpeed === 'imperial'
+      ? 'mph'
+      : 'kmh',
+    precipitation_unit: preferences.value.precipitation === 'imperial'
+      ? 'inch'
+      : 'mm',
   }
 
   const responses = await fetchWeatherApi(url, params)

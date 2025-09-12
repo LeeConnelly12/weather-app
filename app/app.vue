@@ -6,9 +6,19 @@ const results = useState('results', () => [])
 const place = useState('place', () => null)
 const currentTime = new Date()
 const selectedDay = useState('selectedDay', () => format(new Date(), 'EEEE'))
-const preferences = useCookie('preferences')
+
+const preferences = useCookie('preferences', {
+  default: () => ({
+    isMetric: true,
+    temperature: 'metric',
+    windSpeed: 'metric',
+    precipitation: 'metric',
+  }),
+})
+
 const loadingResults = useState('loadingResults', () => false)
 const showResults = useState('showResults', () => false)
+const activeResult = useState('activeResult', () => null)
 
 const daily = useState('daily', () => null)
 const hourly = useState('hourly', () => null)
@@ -54,7 +64,7 @@ const hourlyForecast = computed(() => {
       const forecastDate = new Date(date)
       const isSameDay = format(forecastDate, 'EEEE') === selectedDay.value
 
-      /** Only include hours for the same day */
+      // Only include hours for the same day
       if (!isSameDay) {
         return false
       }
@@ -78,32 +88,55 @@ const hourlyForecast = computed(() => {
 })
 
 const setPlace = async (result) => {
-  const response = await fetchForecastForCoords(result.latitude, result.longitude, preferences.value.isMetric)
+  activeResult.value = result
+
+  const response = await fetchForecastForCoords(result.latitude, result.longitude)
   const current = response.current
   daily.value = response.daily
   hourly.value = response.hourly
 
+  // prettier-ignore
   place.value = {
     date: format(new Date(), 'EEEE, MMM d, yyyy'),
     name: result.name,
     feelsLike: Math.round(current.apparent_temperature) + '°',
     humidity: current.relative_humidity_2m + '%',
-    precipitation:
-      preferences.value.isMetric || preferences.value.precipitation === 'metric'
-        ? Math.round(current.precipitation) + ' mm'
-        : Math.round(current.precipitation / 25.4) + ' in',
+    precipitation: preferences.value.precipitation === 'imperial'
+      ? Math.round(current.precipitation / 25.4) + ' in'
+      : Math.round(current.precipitation) + ' mm',
     temperature: Math.round(current.temperature_2m) + '°',
     weatherCode: current.weather_code,
-    wind:
-      preferences.value.isMetric || preferences.value.windSpeed === 'metric'
-        ? Math.round(current.wind_speed_10m * 3.6) + ' km/h'
-        : Math.round(current.wind_speed_10m * 2.23694) + ' mph',
+    wind: preferences.value.windSpeed === 'imperial'
+      ? Math.round(current.wind_speed_10m * 2.23694) + ' mph'
+      : Math.round(current.wind_speed_10m * 3.6) + ' km/h',
   }
 
   search.value = ''
 
   showResults.value = false
 }
+
+watch(
+  () => ({
+    temperature: preferences.value.temperature,
+    windSpeed: preferences.value.windSpeed,
+    precipitation: preferences.value.precipitation,
+  }),
+  async (newValues, oldValues) => {
+    if (!activeResult.value) {
+      return false
+    }
+
+    if (
+      newValues.temperature !== oldValues.temperature ||
+      newValues.windSpeed !== oldValues.windSpeed ||
+      newValues.precipitation !== oldValues.precipitation
+    ) {
+      await setPlace(activeResult.value)
+    }
+  },
+  { deep: true },
+)
 </script>
 
 <template>

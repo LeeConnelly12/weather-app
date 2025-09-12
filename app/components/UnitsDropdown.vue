@@ -1,14 +1,7 @@
 <script setup>
 import { vOnClickOutside } from '@vueuse/components'
 
-const preferences = useCookie('preferences', {
-  default: () => ({
-    isMetric: true,
-    temperature: 'metric',
-    windSpeed: 'metric',
-    precipitation: 'metric',
-  }),
-})
+const preferences = useCookie('preferences')
 
 const open = ref(false)
 
@@ -68,7 +61,7 @@ const switchUnits = () => {
             @keydown.enter.prevent="preferences.temperature = 'metric'"
             @keydown.space.prevent="preferences.temperature = 'metric'"
             tabindex="0"
-            class="oultine-none mt-2 flex cursor-pointer items-center justify-between rounded-lg px-2 py-2.5 text-left outline-none hover:bg-neutral-700 focus:outline-2 focus:outline-white"
+            class="mt-2 flex cursor-pointer items-center justify-between rounded-lg px-2 py-2.5 text-left outline-none hover:bg-neutral-700 focus:outline-2 focus:outline-white"
             :class="{ 'bg-neutral-700': preferences.temperature === 'metric' }"
           >
             <input v-model="preferences.temperature" type="radio" name="temperature" class="hidden" value="metric" />
