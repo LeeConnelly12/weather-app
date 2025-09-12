@@ -133,10 +133,7 @@ watch(
 </script>
 
 <template>
-  <header class="mt-4 flex items-center justify-between md:mt-6 xl:mx-auto xl:mt-12 xl:max-w-7xl">
-    <Logo class="w-[138px] md:w-[197px]" />
-    <UnitsDropdown />
-  </header>
+  <Nav />
   <main class="mt-12 xl:mt-16">
     <section>
       <h1 class="text-center font-bricolage-grotesque text-6xl font-bold md:mx-auto md:max-w-lg xl:max-w-none">How's the sky looking today?</h1>

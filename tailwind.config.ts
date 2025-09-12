@@ -39,7 +39,12 @@ export default <Partial<Config>>{
             lineHeight: '1',
           },
         ],
-        '6xl': '3.25rem',
+        '6xl': [
+          '3.25rem',
+          {
+            lineHeight: '1.2',
+          },
+        ],
         '8xl': [
           '6rem',
           {

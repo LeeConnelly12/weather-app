@@ -11,7 +11,7 @@ export default defineNuxtConfig({
       title: 'Weather Now',
       link: [{ rel: 'icon', type: 'image/png', href: '/favicon-32x32.png' }],
       bodyAttrs: {
-        class: 'min-h-screen bg-neutral-900 px-4 pb-12 leading-5 font-sans text-white md:px-6 xl:px-0 xl:pb-20',
+        class: 'min-h-screen antialiased bg-neutral-900 px-4 pb-12 leading-5 font-sans text-white md:px-6 xl:px-0 xl:pb-20',
       },
     },
   },
