@@ -189,7 +189,7 @@ watch(
             <p class="mt-3 text-lg opacity-80">{{ place.date }}</p>
           </div>
           <div class="mt-4 inline-flex items-center gap-5">
-            <WeatherCode :weatherCode="place.weatherCode" class="size-[120px]" />
+            <WeatherCode :weatherCode="place.weatherCode" width="120" height="120" />
             <p class="text-8xl">{{ place.temperature }}</p>
           </div>
         </section>
@@ -220,7 +220,7 @@ watch(
               class="rounded-xl border border-neutral-600 bg-neutral-800 px-2.5 py-4 text-center"
             >
               <p class="text-lg">{{ forecast.day }}</p>
-              <WeatherCode :weatherCode="forecast.weatherCode" class="inline-block size-[3.75rem] md:mt-4" />
+              <WeatherCode :weatherCode="forecast.weatherCode" class="inline-block md:mt-4" width="60" height="60" />
               <div class="flex justify-between md:mt-4">
                 <p>{{ forecast.min }}</p>
                 <p class="text-neutral-200">{{ forecast.max }}</p>
@@ -240,7 +240,7 @@ watch(
             :key="forecast.time"
             class="grid grid-cols-[auto_auto_1fr_auto] items-center gap-2 rounded-lg border border-neutral-600 bg-neutral-700 py-2.5 pl-3 pr-4"
           >
-            <WeatherCode :weatherCode="forecast.weatherCode" class="size-10" />
+            <WeatherCode :weatherCode="forecast.weatherCode" width="40" height="40" />
             <time :datetime="forecast.isoTime" class="text-lg">{{ forecast.time }}</time>
             <p class="col-start-4">{{ forecast.temperature }}</p>
           </li>
