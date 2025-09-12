@@ -1,5 +1,5 @@
 <script setup>
-import { addHours, format, startOfHour } from 'date-fns'
+import { format, getHours, startOfHour } from 'date-fns'
 
 const search = useState('search', () => '')
 const results = useState('results', () => [])
@@ -48,23 +48,29 @@ const hourlyForecast = computed(() => {
   }
 
   const startTime = startOfHour(currentTime)
-  const endTime = addHours(currentTime, 8)
 
   return hourly.value.time
     .filter((date) => {
       const forecastDate = new Date(date)
+      const isSameDay = format(forecastDate, 'EEEE') === selectedDay.value
 
-      if (format(forecastDate, 'EEEE') !== selectedDay.value) {
+      /** Only include hours for the same day */
+      if (!isSameDay) {
         return false
       }
 
-      return forecastDate >= startTime && forecastDate <= endTime
+      const isToday = format(startTime, 'EEEE') === selectedDay.value
+      const forecastHour = getHours(forecastDate)
+      const startHour = getHours(startTime)
+
+      return isToday ? forecastHour >= startHour : true
     })
     .map((date) => {
       const index = hourly.value.time.indexOf(date)
 
       return {
         temperature: Math.round(hourly.value.temperature_2m[index]) + '°',
+        isoTime: format(date, 'HH:mm'),
         time: format(date, 'h a'),
         weatherCode: hourly.value.weather_code[index],
       }
@@ -188,7 +194,7 @@ const setPlace = async (result) => {
               class="rounded-xl border border-neutral-600 bg-neutral-800 px-2.5 py-4 text-center"
             >
               <p class="text-lg">{{ forecast.day }}</p>
-              <WeatherCode :weatherCode="forecast.weatherCode" class="inline-block size-[60px] md:mt-4" />
+              <WeatherCode :weatherCode="forecast.weatherCode" class="inline-block size-[3.75rem] md:mt-4" />
               <div class="flex justify-between md:mt-4">
                 <p>{{ forecast.min }}</p>
                 <p class="text-neutral-200">{{ forecast.max }}</p>
@@ -197,19 +203,19 @@ const setPlace = async (result) => {
           </ul>
         </section>
       </div>
-      <section v-if="hourlyForecast.length" class="mt-8 rounded-xl bg-neutral-800 px-4 py-5 md:p-6 xl:mt-0">
-        <div class="flex items-center justify-between">
+      <section v-if="hourlyForecast.length" class="mt-8 max-h-[709px] overflow-y-scroll rounded-xl bg-neutral-800 px-4 pb-5 md:px-6 md:pb-6 xl:mt-0">
+        <div class="sticky top-0 flex items-center justify-between bg-neutral-800 pb-4 pt-5 md:pt-6">
           <h2 class="text-xl font-semibold">Hourly forecast</h2>
           <DayDropdown v-model="selectedDay" />
         </div>
-        <ul class="mt-4 space-y-4">
+        <ul class="space-y-4">
           <li
             v-for="forecast in hourlyForecast"
             :key="forecast.time"
             class="grid grid-cols-[auto_auto_1fr_auto] items-center gap-2 rounded-lg border border-neutral-600 bg-neutral-700 py-2.5 pl-3 pr-4"
           >
             <WeatherCode :weatherCode="forecast.weatherCode" class="size-10" />
-            <p class="text-lg">{{ forecast.time }}</p>
+            <time :datetime="forecast.isoTime" class="text-lg">{{ forecast.time }}</time>
             <p class="col-start-4">{{ forecast.temperature }}</p>
           </li>
         </ul>
