@@ -34,9 +34,9 @@ const switchUnits = () => {
       type="button"
       class="flex items-center gap-1.5 rounded-md bg-neutral-800 px-2.5 py-2 text-sm outline-none focus:outline-2 focus:outline-white md:gap-2"
     >
-      <Units />
+      <IconUnits />
       Units
-      <Chevron :class="{ 'rotate-180': open }" />
+      <IconChevron :class="{ 'rotate-180': open }" />
     </button>
     <ul
       v-if="open"
@@ -66,7 +66,7 @@ const switchUnits = () => {
           >
             <input v-model="preferences.temperature" type="radio" name="temperature" class="hidden" value="metric" />
             Celsius (°C)
-            <CheckMark v-if="preferences.temperature === 'metric'" />
+            <IconCheckMark v-if="preferences.temperature === 'metric'" />
           </label>
           <label
             @keydown.enter.prevent="preferences.temperature = 'imperial'"
@@ -77,7 +77,7 @@ const switchUnits = () => {
           >
             <input v-model="preferences.temperature" type="radio" name="temperature" class="hidden" value="imperial" />
             Fahrenheit (°F)
-            <CheckMark v-if="preferences.temperature === 'imperial'" />
+            <IconCheckMark v-if="preferences.temperature === 'imperial'" />
           </label>
         </fieldset>
       </li>
@@ -93,7 +93,7 @@ const switchUnits = () => {
           >
             <input v-model="preferences.windSpeed" type="radio" name="windSpeed" class="hidden" value="metric" />
             km/h
-            <CheckMark v-if="preferences.windSpeed === 'metric'" />
+            <IconCheckMark v-if="preferences.windSpeed === 'metric'" />
           </label>
           <label
             @keydown.enter.prevent="preferences.windSpeed = 'imperial'"
@@ -104,7 +104,7 @@ const switchUnits = () => {
           >
             <input v-model="preferences.windSpeed" type="radio" name="windSpeed" class="hidden" value="imperial" />
             mph
-            <CheckMark v-if="preferences.windSpeed === 'imperial'" />
+            <IconCheckMark v-if="preferences.windSpeed === 'imperial'" />
           </label>
         </fieldset>
       </li>
@@ -120,7 +120,7 @@ const switchUnits = () => {
           >
             <input v-model="preferences.precipitation" type="radio" name="precipitation" class="hidden" value="metric" />
             Millimeters (mm)
-            <CheckMark v-if="preferences.precipitation === 'metric'" />
+            <IconCheckMark v-if="preferences.precipitation === 'metric'" />
           </label>
           <label
             @keydown.enter.prevent="preferences.precipitation = 'imperial'"
@@ -131,7 +131,7 @@ const switchUnits = () => {
           >
             <input v-model="preferences.precipitation" type="radio" name="precipitation" class="hidden" value="imperial" />
             Inches (in)
-            <CheckMark v-if="preferences.precipitation === 'imperial'" />
+            <IconCheckMark v-if="preferences.precipitation === 'imperial'" />
           </label>
         </fieldset>
       </li>

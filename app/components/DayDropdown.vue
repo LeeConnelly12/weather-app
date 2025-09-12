@@ -33,7 +33,7 @@ watch(selectedDay, () => (open.value = false))
       class="flex items-center gap-1.5 rounded-md bg-neutral-600 px-4 py-2 outline-none focus:outline-2 focus:outline-white"
     >
       {{ loading ? '&ndash;' : selectedDay }}
-      <Chevron :class="{ 'rotate-180': open }" />
+      <IconChevron :class="{ 'rotate-180': open }" />
     </button>
     <ul
       v-if="open"

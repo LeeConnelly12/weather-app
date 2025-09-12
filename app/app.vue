@@ -144,7 +144,7 @@ watch(
       <h1 class="text-center font-bricolage-grotesque text-6xl font-bold md:mx-auto md:max-w-lg xl:max-w-none">How's the sky looking today?</h1>
       <form @submit.prevent="submit" class="mt-12 items-center md:grid md:grid-cols-[1fr_auto] md:gap-4 xl:mx-auto xl:mt-16 xl:max-w-2xl">
         <div class="relative flex items-center">
-          <Search class="pointer-events-none absolute left-6" />
+          <IconSearch class="pointer-events-none absolute left-6" />
           <input
             v-model="search"
             type="search"
@@ -253,7 +253,7 @@ watch(
       <div class="mt-8 xl:mt-0">
         <div class="grid h-[286px] place-items-center rounded-[1.25rem] bg-neutral-800 text-center">
           <div>
-            <Loading />
+            <IconLoading />
             <p class="text-lg text-neutral-200">Loading...</p>
           </div>
         </div>
