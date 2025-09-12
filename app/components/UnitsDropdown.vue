@@ -1,7 +1,7 @@
 <script setup>
 import { vOnClickOutside } from '@vueuse/components'
 
-const preferences = useCookie('preferences')
+const preferences = usePreferencesCookie()
 
 const open = ref(false)
 

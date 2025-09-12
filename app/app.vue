@@ -7,14 +7,7 @@ const place = useState('place', () => null)
 const currentTime = new Date()
 const selectedDay = useState('selectedDay', () => format(new Date(), 'EEEE'))
 
-const preferences = useCookie('preferences', {
-  default: () => ({
-    isMetric: true,
-    temperature: 'metric',
-    windSpeed: 'metric',
-    precipitation: 'metric',
-  }),
-})
+const preferences = usePreferencesCookie()
 
 const loadingResults = useState('loadingResults', () => false)
 const showResults = useState('showResults', () => false)

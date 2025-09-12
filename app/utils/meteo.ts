@@ -13,7 +13,7 @@ export async function fetchCoordsForLocation(location: string) {
 }
 
 export async function fetchForecastForCoords(latitude: number, longitude: number) {
-  const preferences = useCookie('preferences')
+  const preferences = usePreferencesCookie()
 
   const url = 'https://api.open-meteo.com/v1/forecast'
 
