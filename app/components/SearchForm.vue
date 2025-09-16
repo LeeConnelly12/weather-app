@@ -7,15 +7,22 @@ const results = ref([])
 const showResults = ref(false)
 
 const submit = async () => {
-  loading.value = true
-
   showResults.value = true
 
-  const response = await fetchCoordsForLocation(search.value)
+  loading.value = true
+
+  const { data, error } = await fetchCoordsForLocation(search.value)
+
+  if (error.value) {
+    console.error(error.value)
+    showResults.value = false
+    loading.value = false
+    return
+  }
 
   loading.value = false
 
-  results.value = response.results
+  results.value = data.value
 }
 
 const selectedResult = (result) => {

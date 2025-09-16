@@ -1,15 +1,9 @@
 import { fetchWeatherApi } from 'openmeteo'
 
 export async function fetchCoordsForLocation(location: string) {
-  const url = 'https://geocoding-api.open-meteo.com/v1/search'
-
-  const params = new URLSearchParams({
-    name: location,
+  return await useFetch('https://geocoding-api.open-meteo.com/v1/search', {
+    query: { name: location },
   })
-
-  const { data } = await useFetch(url + '?' + params.toString())
-
-  return data.value
 }
 
 export async function fetchForecastForCoords(latitude: number, longitude: number) {
