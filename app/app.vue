@@ -190,7 +190,7 @@ watch(
           </div>
           <div class="mt-4 inline-flex items-center gap-5 md:mt-0">
             <WeatherCode :weatherCode="place.weatherCode" width="120" height="120" />
-            <p class="text-8xl">{{ place.temperature }}</p>
+            <p class="text-8xl italic">{{ place.temperature }}</p>
           </div>
         </section>
         <section class="mt-5 grid grid-cols-2 gap-4 md:grid-cols-4 xl:mt-8 xl:gap-6">
