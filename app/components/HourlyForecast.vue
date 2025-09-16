@@ -6,12 +6,9 @@ const props = defineProps({
     type: Object,
     default: () => {},
   },
-  loading: {
-    type: Boolean,
-    default: false,
-  },
 })
 
+const loading = useState('loading')
 const selectedDay = ref(format(new Date(), 'EEEE'))
 
 const hourlyForecast = computed(() => {
