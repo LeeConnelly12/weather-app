@@ -1,11 +1,10 @@
 <script setup>
-import { format, getHours, startOfHour } from 'date-fns'
+import { format } from 'date-fns'
 
 const activeResult = useState('activeResult', () => null)
 
 const place = useState('place', () => null)
 const loading = useState('loading', () => false)
-const selectedDay = useState('selectedDay', () => format(new Date(), 'EEEE'))
 
 const preferences = usePreferencesCookie()
 
@@ -27,41 +26,6 @@ const dailyForecast = computed(() => {
       weatherCode: daily.value.weather_code[index],
     }
   })
-})
-
-const hourlyForecast = computed(() => {
-  if (!hourly.value?.time) {
-    return []
-  }
-
-  const startTime = startOfHour(new Date())
-
-  return hourly.value.time
-    .filter((date) => {
-      const forecastDate = new Date(date)
-      const isSameDay = format(forecastDate, 'EEEE') === selectedDay.value
-
-      // Only include hours for the same day
-      if (!isSameDay) {
-        return false
-      }
-
-      const isToday = format(startTime, 'EEEE') === selectedDay.value
-      const forecastHour = getHours(forecastDate)
-      const startHour = getHours(startTime)
-
-      return isToday ? forecastHour >= startHour : true
-    })
-    .map((date) => {
-      const index = hourly.value.time.indexOf(date)
-
-      return {
-        temperature: Math.round(hourly.value.temperature_2m[index]) + '°',
-        isoTime: format(date, 'HH:mm'),
-        time: format(date, 'h a'),
-        weatherCode: hourly.value.weather_code[index],
-      }
-    })
 })
 
 const setPlace = async (result) => {
@@ -178,26 +142,7 @@ watch(
           </ul>
         </section>
       </div>
-      <section v-if="hourlyForecast.length" class="mt-8 max-h-[709px] overflow-y-scroll rounded-xl bg-neutral-800 px-4 pb-5 md:px-6 md:pb-6 xl:mt-0">
-        <div class="sticky top-0 flex items-center justify-between bg-neutral-800 pb-4 pt-5 md:pt-6">
-          <h2 class="text-xl font-semibold">Hourly forecast</h2>
-          <DayDropdown v-model="selectedDay" />
-        </div>
-        <ul class="space-y-4">
-          <li
-            v-for="forecast in hourlyForecast"
-            :key="forecast.time"
-            class="grid grid-cols-[auto_auto_1fr_auto] items-center gap-2 rounded-lg border border-neutral-600 bg-neutral-700 py-2.5 pl-3 pr-4"
-          >
-            <WeatherCode :weatherCode="forecast.weatherCode" width="40" height="40" />
-            <time :datetime="forecast.isoTime" class="text-lg">{{ forecast.time }}</time>
-            <p class="col-start-4">
-              <span class="sr-only">Mean temperature:</span>
-              {{ forecast.temperature }}
-            </p>
-          </li>
-        </ul>
-      </section>
+      <HourlyForecast :hourlyData="hourly" :loading="loading" />
     </div>
     <div v-else-if="loading" class="xl:mx-auto xl:mt-12 xl:grid xl:max-w-7xl xl:grid-cols-[50rem_24rem] xl:gap-8">
       <div class="mt-8 xl:mt-0">
@@ -232,15 +177,7 @@ watch(
           </ul>
         </div>
       </div>
-      <div class="mt-8 max-h-[709px] overflow-y-scroll rounded-xl bg-neutral-800 px-4 pb-5 md:px-6 md:pb-6 xl:mt-0">
-        <div class="sticky top-0 flex items-center justify-between bg-neutral-800 pb-4 pt-5 md:pt-6">
-          <h2 class="text-xl font-semibold">Hourly forecast</h2>
-          <DayDropdown v-model="selectedDay" :loading="true" />
-        </div>
-        <div class="space-y-4">
-          <Skeleton v-for="hour in 8" :key="hour" class="h-[62px] rounded-lg border border-neutral-600 bg-neutral-700 py-2.5 pl-3 pr-4" />
-        </div>
-      </div>
+      <HourlyForecast :hourlyData="hourly" :loading="loading" />
     </div>
   </main>
 </template>
