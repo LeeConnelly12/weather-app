@@ -22,7 +22,7 @@ const submit = async () => {
 
   loading.value = false
 
-  results.value = data.value
+  results.value = data.value.results
 }
 
 const selectedResult = (result) => {
