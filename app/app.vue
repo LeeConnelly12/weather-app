@@ -1,32 +1,16 @@
 <script setup>
 import { format, getHours, startOfHour } from 'date-fns'
 
-const search = useState('search', () => '')
-const results = useState('results', () => [])
-const loadingResults = useState('loadingResults', () => false)
-const showResults = useState('showResults', () => false)
 const activeResult = useState('activeResult', () => null)
 
 const place = useState('place', () => null)
-const loadingPlace = useState('loadingPlace', () => false)
+const loading = useState('loading', () => false)
 const selectedDay = useState('selectedDay', () => format(new Date(), 'EEEE'))
 
 const preferences = usePreferencesCookie()
 
 const daily = useState('daily', () => null)
 const hourly = useState('hourly', () => null)
-
-const submit = async () => {
-  loadingResults.value = true
-
-  showResults.value = true
-
-  const response = await fetchCoordsForLocation(search.value)
-
-  loadingResults.value = false
-
-  results.value = response.results
-}
 
 const dailyForecast = computed(() => {
   if (!daily.value?.time) {
@@ -83,15 +67,11 @@ const hourlyForecast = computed(() => {
 const setPlace = async (result) => {
   activeResult.value = result
 
-  search.value = ''
-
-  showResults.value = false
-
-  loadingPlace.value = true
+  loading.value = true
 
   const response = await fetchForecastForCoords(result.latitude, result.longitude)
 
-  loadingPlace.value = false
+  loading.value = false
 
   const current = response.current
   daily.value = response.daily
@@ -100,7 +80,7 @@ const setPlace = async (result) => {
   // prettier-ignore
   place.value = {
     date: format(new Date(), 'EEEE, MMM d, yyyy'),
-    name: result.name,
+    name: result.name + ', ' + result.country,
     feelsLike: Math.round(current.apparent_temperature) + '°',
     humidity: current.relative_humidity_2m + '%',
     precipitation: preferences.value.precipitation === 'imperial'
@@ -141,45 +121,8 @@ watch(
   <Nav />
   <main class="mt-12 xl:mt-16">
     <h1 class="text-center font-bricolage-grotesque text-6xl font-bold md:mx-auto md:max-w-lg xl:max-w-none">How's the sky looking today?</h1>
-    <form @submit.prevent="submit" class="mt-12 items-center md:grid md:grid-cols-[1fr_auto] md:gap-4 xl:mx-auto xl:mt-16 xl:max-w-2xl">
-      <div class="relative flex items-center">
-        <IconSearch class="pointer-events-none absolute left-6" />
-        <input
-          v-model="search"
-          type="search"
-          placeholder="Search for a place..."
-          required
-          minlength="3"
-          class="h-14 w-full rounded-xl bg-neutral-800 pl-[3.75rem] pr-6 text-white outline-none placeholder:text-neutral-200 focus:outline-2 focus:outline-white"
-        />
-        <ul
-          v-if="showResults"
-          class="absolute top-full z-10 mt-2 grid max-h-44 w-full gap-1 overflow-y-auto rounded-xl border border-neutral-700 bg-neutral-800 p-2"
-          tabindex="-1"
-        >
-          <li v-if="!loadingResults" v-for="result in results" :key="result.id">
-            <button
-              type="button"
-              class="w-full rounded-lg border border-transparent p-2 text-left outline-none hover:border-neutral-600 hover:bg-neutral-700 focus:border-neutral-600 focus:bg-neutral-700 focus:outline-2 focus:outline-white"
-              @click="setPlace(result)"
-            >
-              {{ result.name }}
-            </button>
-          </li>
-          <li class="flex items-center gap-2.5 p-2" v-else>
-            <IconLoadingSpinner />
-            <p class="w-full rounded-lg border border-transparent text-left">Search in progress</p>
-          </li>
-        </ul>
-      </div>
-      <button
-        type="submit"
-        class="mt-3 h-14 w-full rounded-xl bg-blue-500 text-xl outline-none hover:bg-blue-700 focus:outline-2 focus:outline-blue-500 md:mt-0 md:px-6"
-      >
-        Search
-      </button>
-    </form>
-    <div v-if="place && !loadingPlace" class="xl:mx-auto xl:mt-12 xl:grid xl:max-w-7xl xl:grid-cols-[50rem_24rem] xl:gap-8">
+    <SearchForm @selectedResult="setPlace" />
+    <div v-if="place && !loading" class="xl:mx-auto xl:mt-12 xl:grid xl:max-w-7xl xl:grid-cols-[50rem_24rem] xl:gap-8">
       <div class="mt-8 xl:mt-0">
         <section
           class="h-[286px] w-full rounded-[1.25rem] bg-today-small bg-cover bg-no-repeat py-10 text-center md:flex md:items-center md:justify-between md:bg-today-large md:px-6 md:text-left"
@@ -256,7 +199,7 @@ watch(
         </ul>
       </section>
     </div>
-    <div v-else-if="loadingPlace" class="xl:mx-auto xl:mt-12 xl:grid xl:max-w-7xl xl:grid-cols-[50rem_24rem] xl:gap-8">
+    <div v-else-if="loading" class="xl:mx-auto xl:mt-12 xl:grid xl:max-w-7xl xl:grid-cols-[50rem_24rem] xl:gap-8">
       <div class="mt-8 xl:mt-0">
         <div class="grid h-[286px] place-items-center rounded-[1.25rem] bg-neutral-800 text-center">
           <div>
