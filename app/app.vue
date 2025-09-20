@@ -70,10 +70,10 @@ onMounted(async () => {
     <SearchForm @selectedResult="setPlace" />
     <div class="xl:mx-auto xl:mt-12 xl:grid xl:max-w-7xl xl:grid-cols-[50rem_24rem] xl:gap-8">
       <div class="mt-8 xl:mt-0">
-        <CurrentForecast :currentData="currentData" :activeResult="activeResult" />
-        <DailyForecast :dailyData="dailyData" />
+        <CurrentForecast :data="currentData" :activeResult="activeResult" />
+        <DailyForecast :data="dailyData" />
       </div>
-      <HourlyForecast :hourlyData="hourlyData" />
+      <HourlyForecast :data="hourlyData" />
     </div>
   </main>
 </template>

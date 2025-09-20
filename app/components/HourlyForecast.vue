@@ -2,7 +2,7 @@
 import { format, getHours, startOfHour } from 'date-fns'
 
 const props = defineProps({
-  hourlyData: {
+  data: {
     type: Object,
     default: () => {},
   },
@@ -12,13 +12,13 @@ const loading = useState('loading')
 const selectedDay = ref(format(new Date(), 'EEEE'))
 
 const hourlyForecast = computed(() => {
-  if (!props.hourlyData?.time) {
+  if (!props.data?.time) {
     return []
   }
 
   const startTime = startOfHour(new Date())
 
-  return props.hourlyData.time
+  return props.data.time
     .filter((date) => {
       const forecastDate = new Date(date)
       const isSameDay = format(forecastDate, 'EEEE') === selectedDay.value
@@ -35,13 +35,13 @@ const hourlyForecast = computed(() => {
       return isToday ? forecastHour >= startHour : true
     })
     .map((date) => {
-      const index = props.hourlyData.time.indexOf(date)
+      const index = props.data.time.indexOf(date)
 
       return {
-        temperature: Math.round(props.hourlyData.temperature_2m[index]) + '°',
+        temperature: Math.round(props.data.temperature_2m[index]) + '°',
         isoTime: format(date, 'HH:mm'),
         time: format(date, 'h a'),
-        weatherCode: props.hourlyData.weather_code[index],
+        weatherCode: props.data.weather_code[index],
       }
     })
 })

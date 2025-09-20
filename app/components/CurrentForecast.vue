@@ -2,7 +2,7 @@
 import { format } from 'date-fns'
 
 const props = defineProps({
-  currentData: {
+  data: {
     type: Object,
     default: () => {},
   },
@@ -17,7 +17,7 @@ const preferences = usePreferencesCookie()
 const loading = useState('loading')
 
 const formattedPlace = computed(() => {
-  if (!props.currentData) {
+  if (!props.data) {
     return null
   }
 
@@ -28,18 +28,18 @@ const formattedPlace = computed(() => {
   return {
     date: format(new Date(), 'EEEE, MMM d, yyyy'),
     name: props.activeResult.name + ', ' + props.activeResult.country,
-    feelsLike: Math.round(props.currentData.apparent_temperature) + '°',
-    humidity: props.currentData.relative_humidity_2m + '%',
+    feelsLike: Math.round(props.data.apparent_temperature) + '°',
+    humidity: props.data.relative_humidity_2m + '%',
     precipitation:
       preferences.value.precipitation === 'imperial'
-        ? Math.round(props.currentData.precipitation / 25.4) + ' in'
-        : Math.round(props.currentData.precipitation) + ' mm',
-    temperature: Math.round(props.currentData.temperature_2m) + '°',
-    weatherCode: props.currentData.weather_code,
+        ? Math.round(props.data.precipitation / 25.4) + ' in'
+        : Math.round(props.data.precipitation) + ' mm',
+    temperature: Math.round(props.data.temperature_2m) + '°',
+    weatherCode: props.data.weather_code,
     wind:
       preferences.value.windSpeed === 'imperial'
-        ? Math.round(props.currentData.wind_speed_10m * 2.23694) + ' mph'
-        : Math.round(props.currentData.wind_speed_10m * 3.6) + ' km/h',
+        ? Math.round(props.data.wind_speed_10m * 2.23694) + ' mph'
+        : Math.round(props.data.wind_speed_10m * 3.6) + ' km/h',
   }
 })
 </script>

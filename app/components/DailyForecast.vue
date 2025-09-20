@@ -2,7 +2,7 @@
 import { format } from 'date-fns'
 
 const props = defineProps({
-  dailyData: {
+  data: {
     type: Object,
     default: () => {},
   },
@@ -11,18 +11,18 @@ const props = defineProps({
 const loading = useState('loading')
 
 const dailyForecast = computed(() => {
-  if (!props.dailyData?.time) {
+  if (!props.data?.time) {
     return []
   }
 
-  return props.dailyData.time.map((date) => {
-    const index = props.dailyData.time.indexOf(date)
+  return props.data.time.map((date) => {
+    const index = props.data.time.indexOf(date)
 
     return {
       day: format(date, 'EEE'),
-      min: Math.round(props.dailyData.temperature_2m_min[index]) + '°',
-      max: Math.round(props.dailyData.temperature_2m_max[index]) + '°',
-      weatherCode: props.dailyData.weather_code[index],
+      min: Math.round(props.data.temperature_2m_min[index]) + '°',
+      max: Math.round(props.data.temperature_2m_max[index]) + '°',
+      weatherCode: props.data.weather_code[index],
     }
   })
 })
