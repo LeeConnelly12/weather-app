@@ -54,7 +54,7 @@ const { data, status } = await useFetch('/api/geolocation')
 
 onMounted(async () => {
   if (status.value === 'success') {
-    locationCookie.value = data.value
+    preferences.value = { ...preferences.value, ...data.value }
 
     await setPlace(data.value)
   }

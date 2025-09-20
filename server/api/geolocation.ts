@@ -3,10 +3,14 @@ import { createError, defineEventHandler, getCookie, getHeaders } from 'h3'
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
 
-  const location = getCookie(event, 'location')
+  const location = getCookie(event, 'preferences')
 
   if (location && typeof location === 'string') {
-    return JSON.parse(location)
+    const json = JSON.parse(location)
+
+    if (json.latitude && json.longitude) {
+      return JSON.parse(location)
+    }
   }
 
   const headers = getHeaders(event)
