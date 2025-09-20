@@ -20,9 +20,9 @@ export default defineEventHandler(async (event) => {
   // Fallback for local environment
   if (clientIp === '::1' || clientIp === '127.0.0.1' || !clientIp) {
     return {
-      city: 'Mountain View',
-      region_name: 'California',
-      country_name: 'United States',
+      name: 'Mountain View',
+      admin1: 'California',
+      country: 'United States',
       latitude: 37.42301,
       longitude: -122.083352,
     }
@@ -36,9 +36,9 @@ export default defineEventHandler(async (event) => {
     })
 
     return {
-      city: response.city,
-      region_name: response.region_name,
-      country_name: response.country_name,
+      name: response.city,
+      admin1: response.region_name,
+      country: response.country_name,
       latitude: response.latitude,
       longitude: response.longitude,
     }
