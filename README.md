@@ -59,8 +59,7 @@ Users should be able to:
 
 When the page loads for the first time, a request is sent to an API to geolocate using the user's IP address. <br>
 To avoid excessive calls, a cookie is set after the first request to remember the coordinates. <br>
-However, when calling an API route using useFetch, Nuxt doesn't actually send a HTTP request, instead it calls the method directly - <br>
-because of this you're not able to set cookies in the server route. Instead, I'm setting the cookie on the frontend.
+However, when calling an API route using useFetch, Nuxt doesn't actually send a HTTP request, instead it calls the method directly, because of this you're not able to set cookies in the server route. Instead, I'm setting the cookie on the frontend.
 
 ## Author
 
