@@ -3,8 +3,6 @@ const activeResult = ref(null)
 
 const loading = useState('loading', () => false)
 
-const locationCookie = useCookie('location')
-
 const preferences = usePreferencesCookie()
 
 const currentData = ref(null)
