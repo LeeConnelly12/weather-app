@@ -42,20 +42,25 @@ watch(
       await setPlace(activeResult.value)
     }
   },
-  { deep: true },
+  {
+    deep: true,
+    immediate: false,
+  },
 )
 
 const { data, status } = await useFetch('/api/geolocation')
 
-if (status.value === 'success') {
-  await setPlace({
-    name: data.value.city,
-    country: data.value.country_name,
-    admin1: data.value.region_name,
-    latitude: data.value.latitude,
-    longitude: data.value.longitude,
-  })
-}
+onMounted(async () => {
+  if (status.value === 'success') {
+    await setPlace({
+      name: data.value.city,
+      country: data.value.country_name,
+      admin1: data.value.region_name,
+      latitude: data.value.latitude,
+      longitude: data.value.longitude,
+    })
+  }
+})
 </script>
 
 <template>
