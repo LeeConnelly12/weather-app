@@ -31,7 +31,9 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const response = await $fetch(`http://ip-api.com/json/${clientIp}`)
+    const response = await $fetch(`http://ip-api.com/json/${clientIp}`, {
+      timeout: 2000,
+    })
 
     return {
       name: response.city,
