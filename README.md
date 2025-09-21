@@ -53,7 +53,7 @@ Users should be able to:
 - [Nuxt](https://nuxt.com) - Vue framework
 - [Tailwind](https://tailwindcss.com) - CSS framework
 - [Open-Meteo](https://open-meteo.com) - Weather API
-- [ipapi](https://ipapi.com) - IP lookup API
+- [ip-api](https://ip-api.com) - IP lookup API
 
 ### What I learned
 

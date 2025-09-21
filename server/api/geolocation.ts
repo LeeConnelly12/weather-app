@@ -1,8 +1,6 @@
 import { createError, defineEventHandler, getCookie, getHeaders } from 'h3'
 
 export default defineEventHandler(async (event) => {
-  const config = useRuntimeConfig()
-
   const location = getCookie(event, 'preferences')
 
   if (location && typeof location === 'string') {
@@ -33,18 +31,14 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const response = await $fetch(`https://api.ipapi.com/api/${clientIp}`, {
-      query: {
-        access_key: config.apiAccessKey,
-      },
-    })
+    const response = await $fetch(`http://ip-api.com/json/${clientIp}`)
 
     return {
       name: response.city,
-      admin1: response.region_name,
-      country: response.country_name,
-      latitude: response.latitude,
-      longitude: response.longitude,
+      admin1: response.regionName,
+      country: response.country,
+      latitude: response.lat,
+      longitude: response.lon,
     }
   } catch (error) {
     console.error('Failed geolocation for IP', error)

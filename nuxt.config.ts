@@ -15,7 +15,4 @@ export default defineNuxtConfig({
       },
     },
   },
-  runtimeConfig: {
-    apiAccessKey: import.meta.env?.API_ACCESS_KEY,
-  },
 })
