@@ -58,7 +58,7 @@ const switchUnits = () => {
       </li>
       <li class="mt-2.5">
         <fieldset>
-          <legend class="pl-2 text-sm text-neutral-300">Temperature</legend>
+          <legend class="pl-2 text-sm text-neutral-300">Temperature unit</legend>
           <label
             @keydown.enter.prevent="preferences.temperature = 'metric'"
             @keydown.space.prevent="preferences.temperature = 'metric'"
@@ -85,7 +85,7 @@ const switchUnits = () => {
       </li>
       <li class="mt-1 border-t border-t-neutral-600 pt-2.5">
         <fieldset>
-          <legend class="pl-2 text-sm text-neutral-300">Wind Speed</legend>
+          <legend class="pl-2 text-sm text-neutral-300">Wind speed unit</legend>
           <label
             @keydown.enter.prevent="preferences.windSpeed = 'metric'"
             @keydown.space.prevent="preferences.windSpeed = 'metric'"
@@ -112,7 +112,7 @@ const switchUnits = () => {
       </li>
       <li class="mt-1 border-t border-t-neutral-600 pt-2.5">
         <fieldset>
-          <legend class="pl-2 text-sm text-neutral-300">Precipitation</legend>
+          <legend class="pl-2 text-sm text-neutral-300">Precipitation unit</legend>
           <label
             @keydown.enter.prevent="preferences.precipitation = 'metric'"
             @keydown.space.prevent="preferences.precipitation = 'metric'"

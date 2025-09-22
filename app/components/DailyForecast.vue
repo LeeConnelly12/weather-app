@@ -32,14 +32,10 @@ const dailyForecast = computed(() => {
   <section v-if="!loading && dailyForecast.length" class="mt-8 xl:mt-[3.75rem]">
     <h2 class="text-xl font-semibold">Daily forecast</h2>
     <ul class="mt-5 grid grid-cols-[repeat(auto-fit,minmax(89px,1fr))] gap-4">
-      <li
-        v-for="forecast in dailyForecast"
-        :key="forecast.day"
-        class="h-[167px] rounded-xl border border-neutral-600 bg-neutral-800 px-2.5 py-4 text-center"
-      >
-        <p class="text-lg">{{ forecast.day }}</p>
-        <WeatherCode :weatherCode="forecast.weatherCode" class="inline-block md:mt-4" width="60" height="60" />
-        <div class="flex justify-between md:mt-4">
+      <li v-for="forecast in dailyForecast" :key="forecast.day" class="rounded-xl border border-neutral-600 bg-neutral-800 px-2.5 py-4 text-center">
+        <h3 class="text-lg">{{ forecast.day }}</h3>
+        <WeatherCode :weatherCode="forecast.weatherCode" class="mt-4 inline-block" width="60" height="60" />
+        <div class="mt-4 flex justify-between">
           <div>
             <span class="sr-only">Minimum temperature: </span>
             <span>{{ forecast.min }}</span>

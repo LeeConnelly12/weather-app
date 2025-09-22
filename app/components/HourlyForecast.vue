@@ -60,11 +60,11 @@ const hourlyForecast = computed(() => {
       <li
         v-for="forecast in hourlyForecast"
         :key="forecast.time"
-        class="grid grid-cols-[auto_auto_1fr_auto] items-center gap-2 rounded-lg border border-neutral-600 bg-neutral-700 py-2.5 pl-3 pr-4"
+        class="flex items-center gap-2 rounded-lg border border-neutral-600 bg-neutral-700 py-2.5 pl-3 pr-4"
       >
         <WeatherCode :weatherCode="forecast.weatherCode" width="40" height="40" />
         <time :datetime="forecast.isoTime" class="text-lg">{{ forecast.time }}</time>
-        <div class="col-start-4">
+        <div class="ml-auto">
           <span class="sr-only">Mean temperature: </span>
           <span>{{ forecast.temperature }}</span>
         </div>
