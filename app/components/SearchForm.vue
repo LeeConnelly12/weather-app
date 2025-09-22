@@ -11,11 +11,17 @@ const submit = async () => {
 
   loading.value = true
 
-  const { data, error } = await fetchCoordsForLocation(search.value)
+  const { data, error, status } = await fetchCoordsForLocation(search.value)
 
-  if (error.value) {
+  if (status.value === 'error') {
     console.error(error.value)
     showResults.value = false
+    loading.value = false
+    return
+  }
+
+  if (!data.value.results) {
+    results.value = []
     loading.value = false
     return
   }
@@ -78,7 +84,10 @@ const getFormattedNameForResult = (result) => {
             {{ getFormattedNameForResult(result) }}
           </button>
         </li>
-        <li class="flex items-center gap-2.5 p-2" v-else>
+        <li v-if="!loading && results.length === 0" class="flex items-center gap-2.5 p-2">
+          <p class="w-full rounded-lg border border-transparent text-left">No search result found!</p>
+        </li>
+        <li v-if="loading" class="flex items-center gap-2.5 p-2">
           <IconLoadingSpinner />
           <p class="w-full rounded-lg border border-transparent text-left">Search in progress</p>
         </li>
