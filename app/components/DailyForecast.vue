@@ -40,14 +40,14 @@ const dailyForecast = computed(() => {
         <p class="text-lg">{{ forecast.day }}</p>
         <WeatherCode :weatherCode="forecast.weatherCode" class="inline-block md:mt-4" width="60" height="60" />
         <div class="flex justify-between md:mt-4">
-          <p>
-            <span class="sr-only">Minimum temperature:</span>
-            {{ forecast.min }}
-          </p>
-          <p class="text-neutral-200">
-            <span class="sr-only">Maximum temperature:</span>
-            {{ forecast.max }}
-          </p>
+          <div>
+            <span class="sr-only">Minimum temperature: </span>
+            <span>{{ forecast.min }}</span>
+          </div>
+          <div class="text-neutral-200">
+            <span class="sr-only">Maximum temperature: </span>
+            <span>{{ forecast.max }}</span>
+          </div>
         </div>
       </li>
     </ul>

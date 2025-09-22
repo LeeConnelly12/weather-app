@@ -34,6 +34,7 @@ const switchUnits = () => {
       type="button"
       class="flex items-center gap-1.5 rounded-md bg-neutral-800 px-2.5 py-2 text-sm outline-none focus:outline-2 focus:outline-white md:gap-2"
       :aria-expanded="open"
+      aria-label="Switch temperature units"
     >
       <IconUnits />
       Units

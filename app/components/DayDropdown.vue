@@ -1,6 +1,5 @@
 <script setup>
 import { vOnClickOutside } from '@vueuse/components'
-import { useTemplateRefsList } from '@vueuse/core'
 
 const props = defineProps({
   modelValue: {
@@ -32,6 +31,7 @@ watch(selectedDay, () => (open.value = false))
       type="button"
       class="flex items-center gap-1.5 rounded-md bg-neutral-600 px-4 py-2 outline-none focus:outline-2 focus:outline-white"
       :aria-expanded="open"
+      aria-label="Select day of week"
     >
       {{ loading ? '&ndash;' : selectedDay }}
       <IconChevron :class="{ 'rotate-180': open }" />

@@ -64,10 +64,10 @@ const hourlyForecast = computed(() => {
       >
         <WeatherCode :weatherCode="forecast.weatherCode" width="40" height="40" />
         <time :datetime="forecast.isoTime" class="text-lg">{{ forecast.time }}</time>
-        <p class="col-start-4">
-          <span class="sr-only">Mean temperature:</span>
-          {{ forecast.temperature }}
-        </p>
+        <div class="col-start-4">
+          <span class="sr-only">Mean temperature: </span>
+          <span>{{ forecast.temperature }}</span>
+        </div>
       </li>
     </ul>
   </section>
