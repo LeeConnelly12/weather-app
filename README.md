@@ -37,7 +37,7 @@ Users should be able to:
 
 ### Links
 
-- Solution URL: [Add solution URL here](https://your-solution-url.com)
+- Solution URL: [Solution](https://www.frontendmentor.io/solutions/weather-app-using-nuxt-and-tailwind-TX_VpsuDcZ)
 - Live Site URL: [Live site](https://weather-now.leeconnelly.dev)
 
 ## My process
