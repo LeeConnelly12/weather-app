@@ -41,6 +41,10 @@ const addToViewedLocations = (location) => {
   }
 }
 
+const clearPlaces = () => {
+  preferences.value.viewedLocations = []
+}
+
 watch(
   () => ({
     temperature: preferences.value.temperature,
@@ -83,7 +87,17 @@ onMounted(async () => {
     <h1 class="text-center font-bricolage-grotesque text-6xl font-bold md:mx-auto md:max-w-lg xl:max-w-none">How's the sky looking today?</h1>
     <SearchForm @selectedResult="setPlace" />
     <section v-if="preferences.viewedLocations.length" class="mt-8 xl:mx-auto xl:max-w-7xl">
-      <h2 class="text-xl font-semibold">Viewed places</h2>
+      <div class="flex items-center justify-between sm:justify-normal sm:gap-6">
+        <h2 class="text-xl font-semibold">Viewed places</h2>
+        <button
+          @click="clearPlaces"
+          type="button"
+          aria-label="Clear places"
+          class="h-10 rounded-xl bg-neutral-800 px-6 outline-none hover:bg-neutral-700 focus:outline-2 focus:outline-white md:mt-0 md:px-6"
+        >
+          Clear
+        </button>
+      </div>
       <ul class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <li v-for="location in preferences.viewedLocations" class="flex">
           <button
