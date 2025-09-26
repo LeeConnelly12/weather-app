@@ -102,7 +102,7 @@ onMounted(async () => {
         <li v-for="location in preferences.viewedLocations" class="flex">
           <button
             @click="setPlace(location)"
-            class="flex w-full flex-col rounded-xl border border-neutral-600 bg-neutral-800 p-5 text-left outline-none focus:outline-2 focus:outline-white"
+            class="flex h-28 w-full flex-col rounded-xl border border-neutral-600 bg-neutral-800 p-5 text-left outline-none focus:outline-2 focus:outline-white"
             :aria-label="`View forecast for ${location.name}`"
           >
             <div class="text-lg">{{ location.name }}</div>
