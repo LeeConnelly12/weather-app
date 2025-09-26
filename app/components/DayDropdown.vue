@@ -41,16 +41,14 @@ watch(selectedDay, () => (open.value = false))
       v-on-click-outside="[() => (open = false), { ignore: [ignoreElRef] }]"
       class="absolute right-0 top-full z-10 mt-2.5 w-[13.375rem] space-y-1 rounded-xl border border-neutral-600 bg-neutral-800 px-2 py-1.5"
       @keydown.escape="open = false"
+      role="menu"
     >
-      <li v-for="day in days" :key="day">
+      <li v-for="day in days" :key="day" role="menuitem">
         <label
-          class="block cursor-pointer rounded-lg px-2 py-2.5 outline-none hover:bg-neutral-700 focus:bg-neutral-700 focus:outline-2 focus:outline-white"
+          class="block cursor-pointer rounded-lg px-2 py-2.5 outline-none focus-within:bg-neutral-700 focus-within:outline-2 focus-within:outline-white hover:bg-neutral-700"
           :class="{ 'bg-neutral-700': day === selectedDay }"
-          tabindex="0"
-          @keydown.enter.prevent="selectedDay = day"
-          @keydown.space.prevent="selectedDay = day"
         >
-          <input v-model="selectedDay" type="radio" :value="day" class="hidden" />
+          <input v-model="selectedDay" type="radio" :value="day" class="sr-only" />
           {{ day }}
         </label>
       </li>
