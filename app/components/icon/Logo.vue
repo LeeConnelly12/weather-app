@@ -1,5 +1,6 @@
 <template>
-  <svg width="197" height="40" viewBox="0 0 197 40" fill="none" aria-hidden="true">
+  <svg width="197" height="40" viewBox="0 0 197 40" fill="none">
+    <title>Weather Now Logo</title>
     <g clip-path="url(#a)">
       <path
         fill="#FF820A"
