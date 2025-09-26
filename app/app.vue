@@ -92,7 +92,7 @@ onMounted(async () => {
         <button
           @click="clearPlaces"
           type="button"
-          aria-label="Clear places"
+          aria-label="Clear viewed places"
           class="h-10 rounded-xl bg-neutral-800 px-6 outline-none hover:bg-neutral-700 focus:outline-2 focus:outline-white md:mt-0 md:px-6"
         >
           Clear
