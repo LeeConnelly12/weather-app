@@ -120,5 +120,9 @@ onMounted(async () => {
       </div>
       <HourlyForecast :data="hourlyData" />
     </div>
+    <div class="mt-8 text-center">
+      Challenge by <a href="https://www.frontendmentor.io?ref=challenge" class="text-blue-400 underline">Frontend Mentor</a>. Coded by
+      <a href="https://leeconnelly.dev" class="text-blue-400 underline">Lee Connelly</a>.
+    </div>
   </main>
 </template>
