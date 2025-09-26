@@ -10,6 +10,7 @@ const ignoreElRef = useTemplateRef('ignoreElRef')
 const switchUnits = () => {
   if (preferences.value.isMetric) {
     preferences.value = {
+      ...preferences.value,
       isMetric: false,
       temperature: 'imperial',
       windSpeed: 'imperial',
@@ -17,6 +18,7 @@ const switchUnits = () => {
     }
   } else {
     preferences.value = {
+      ...preferences.value,
       isMetric: true,
       temperature: 'metric',
       windSpeed: 'metric',
