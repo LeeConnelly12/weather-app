@@ -10,6 +10,10 @@ const dailyData = ref(null)
 const hourlyData = ref(null)
 
 const setPlace = async (result) => {
+  if (result === activeResult.value) {
+    return
+  }
+
   activeResult.value = result
 
   loading.value = true
