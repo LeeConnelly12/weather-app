@@ -99,7 +99,7 @@ onMounted(async () => {
         </button>
       </div>
       <ul class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <li v-for="location in preferences.viewedLocations" class="flex">
+        <li v-for="location in preferences.viewedLocations">
           <button
             @click="setPlace(location)"
             class="flex h-28 w-full flex-col rounded-xl border border-neutral-600 bg-neutral-800 p-5 text-left outline-none focus:outline-2 focus:outline-white"
