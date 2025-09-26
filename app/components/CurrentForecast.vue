@@ -27,7 +27,7 @@ const formattedPlace = computed(() => {
 
   return {
     date: format(new Date(), 'EEEE, MMM d, yyyy'),
-    isoDate: format(new Date(), 'Y-mm-dd'),
+    isoDate: format(new Date(), 'yyyy-MM-dd'),
     name: props.activeResult.name + ', ' + props.activeResult.country,
     feelsLike: Math.round(props.data.apparent_temperature) + '°',
     humidity: props.data.relative_humidity_2m + '%',
