@@ -51,9 +51,7 @@ const formattedPlace = computed(() => {
       class="h-[286px] w-full rounded-[1.25rem] bg-today-small bg-cover bg-no-repeat py-10 text-center md:flex md:items-center md:justify-between md:bg-today-large md:px-6 md:text-left"
     >
       <div>
-        <address>
-          <h2 class="text-3xl font-bold">{{ formattedPlace.name }}</h2>
-        </address>
+        <h2 class="text-3xl font-bold">{{ formattedPlace.name }}</h2>
         <time :datetime="formattedPlace.isoDate" class="mt-3 text-lg opacity-80">{{ formattedPlace.date }}</time>
       </div>
       <div class="mt-4 inline-flex items-center gap-5 md:mt-0">
