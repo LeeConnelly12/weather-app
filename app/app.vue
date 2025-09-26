@@ -21,6 +21,24 @@ const setPlace = async (result) => {
   currentData.value = response.current
   dailyData.value = response.daily
   hourlyData.value = response.hourly
+
+  addToViewedLocations(result)
+}
+
+const addToViewedLocations = (location) => {
+  if (location.name === preferences.value.name) {
+    return
+  }
+
+  if (preferences.value.viewedLocations.includes(location)) {
+    return
+  }
+
+  preferences.value.viewedLocations = [...preferences.value.viewedLocations, location]
+
+  if (preferences.value.viewedLocations.length > 2) {
+    preferences.value.viewedLocations.shift()
+  }
 }
 
 watch(
@@ -64,6 +82,23 @@ onMounted(async () => {
   <main class="mt-12 xl:mt-16">
     <h1 class="text-center font-bricolage-grotesque text-6xl font-bold md:mx-auto md:max-w-lg xl:max-w-none">How's the sky looking today?</h1>
     <SearchForm @selectedResult="setPlace" />
+    <section v-if="preferences.viewedLocations.length" class="mt-8 xl:mx-auto xl:max-w-7xl">
+      <h2 class="text-xl font-semibold">Viewed places</h2>
+      <ul class="mt-5 grid gap-4 sm:grid-cols-2 md:grid-cols-4">
+        <li v-for="location in preferences.viewedLocations" class="flex">
+          <button
+            @click="setPlace(location)"
+            class="flex w-full flex-col rounded-xl border border-neutral-600 bg-neutral-800 px-2.5 py-4 text-left outline-none focus:outline-2 focus:outline-white"
+            :aria-label="`View forecast for ${location.name}`"
+          >
+            <div class="text-lg">{{ location.name }}</div>
+            <div class="mt-1 line-clamp-2 opacity-80">
+              {{ location.country }}{{ location.admin2 ? ', ' + location.admin2 : '' }}{{ location.admin1 ? ', ' + location.admin1 : '' }}
+            </div>
+          </button>
+        </li>
+      </ul>
+    </section>
     <div class="xl:mx-auto xl:mt-12 xl:grid xl:max-w-7xl xl:grid-cols-[50rem_24rem] xl:gap-8">
       <div class="mt-8 xl:mt-0">
         <CurrentForecast :data="currentData" :activeResult="activeResult" />

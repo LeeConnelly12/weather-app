@@ -1,3 +1,12 @@
+interface Location {
+  name: string
+  country: string
+  admin1: string
+  admin2: string
+  latitude: number
+  longitude: number
+}
+
 interface Preferences {
   isMetric: boolean
   temperature: 'metric' | 'imperial'
@@ -8,6 +17,7 @@ interface Preferences {
   country: string | null
   latitude: number | null
   longitude: number | null
+  viewedLocations: Location[]
 }
 
 export function usePreferencesCookie() {
@@ -22,6 +32,7 @@ export function usePreferencesCookie() {
       country: null,
       latitude: null,
       longitude: null,
+      viewedLocations: [],
     }),
   })
 }
