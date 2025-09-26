@@ -59,7 +59,7 @@ const switchUnits = () => {
           <template v-else>Switch to Metric</template>
         </button>
       </li>
-      <li class="mt-2.5">
+      <li class="mt-2.5" role="menuitem">
         <fieldset>
           <legend class="pl-2 text-sm text-neutral-300">Temperature unit</legend>
           <label
@@ -80,7 +80,7 @@ const switchUnits = () => {
           </label>
         </fieldset>
       </li>
-      <li class="mt-1 border-t border-t-neutral-600 pt-2.5">
+      <li class="mt-1 border-t border-t-neutral-600 pt-2.5" role="menuitem">
         <fieldset>
           <legend class="pl-2 text-sm text-neutral-300">Wind speed unit</legend>
           <label
@@ -101,7 +101,7 @@ const switchUnits = () => {
           </label>
         </fieldset>
       </li>
-      <li class="mt-1 border-t border-t-neutral-600 pt-2.5">
+      <li class="mt-1 border-t border-t-neutral-600 pt-2.5" role="menuitem">
         <fieldset>
           <legend class="pl-2 text-sm text-neutral-300">Precipitation unit</legend>
           <label
