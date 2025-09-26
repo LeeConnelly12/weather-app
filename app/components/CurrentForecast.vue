@@ -61,22 +61,22 @@ const formattedPlace = computed(() => {
       </div>
     </section>
     <section class="mt-5 grid grid-cols-2 gap-4 md:grid-cols-4 xl:mt-8 xl:gap-6">
-      <div class="rounded-xl border border-neutral-600 bg-neutral-800 p-5">
+      <dl class="rounded-xl border border-neutral-600 bg-neutral-800 p-5">
         <dt class="text-lg text-neutral-200">Feels Like</dt>
         <dd class="mt-6 text-4xl font-light">{{ formattedPlace.feelsLike }}</dd>
-      </div>
-      <div class="rounded-xl border border-neutral-600 bg-neutral-800 p-5">
+      </dl>
+      <dl class="rounded-xl border border-neutral-600 bg-neutral-800 p-5">
         <dt class="text-lg text-neutral-200">Humidity</dt>
         <dd class="mt-6 text-4xl font-light">{{ formattedPlace.humidity }}</dd>
-      </div>
-      <div class="rounded-xl border border-neutral-600 bg-neutral-800 p-5">
+      </dl>
+      <dl class="rounded-xl border border-neutral-600 bg-neutral-800 p-5">
         <dt class="text-lg text-neutral-200">Wind</dt>
         <dd class="mt-6 text-4xl font-light">{{ formattedPlace.wind }}</dd>
-      </div>
-      <div class="rounded-xl border border-neutral-600 bg-neutral-800 p-5">
+      </dl>
+      <dl class="rounded-xl border border-neutral-600 bg-neutral-800 p-5">
         <dt class="text-lg text-neutral-200">Precipitation</dt>
         <dd class="mt-6 text-4xl font-light">{{ formattedPlace.precipitation }}</dd>
-      </div>
+      </dl>
     </section>
   </template>
   <template v-if="loading">
