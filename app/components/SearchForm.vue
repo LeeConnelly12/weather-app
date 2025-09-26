@@ -1,4 +1,6 @@
 <script setup>
+import { useDebounceFn } from '@vueuse/core'
+
 const emit = defineEmits(['selectedResult'])
 
 const loading = ref(false)
@@ -6,29 +8,8 @@ const search = ref('')
 const results = ref([])
 const showResults = ref(false)
 
-const submit = async () => {
-  showResults.value = true
-
-  loading.value = true
-
-  const { data, error, status } = await fetchCoordsForLocation(search.value)
-
-  if (status.value === 'error') {
-    console.error(error.value)
-    showResults.value = false
-    loading.value = false
-    return
-  }
-
-  if (!data.value.results) {
-    results.value = []
-    loading.value = false
-    return
-  }
-
-  loading.value = false
-
-  results.value = data.value.results
+const submitSearch = async () => {
+  await performSearch()
 }
 
 const selectedResult = (result) => {
@@ -56,10 +37,41 @@ const getFormattedNameForResult = (result) => {
 
   return parts.join(', ')
 }
+
+const performSearch = useDebounceFn(async () => {
+  if (search.value.length < 3) {
+    showResults.value = false
+    loading.value = false
+    return
+  }
+
+  showResults.value = true
+
+  loading.value = true
+
+  const { data, error, status } = await fetchCoordsForLocation(search.value)
+
+  if (status.value === 'error') {
+    console.error(error.value)
+    showResults.value = false
+    loading.value = false
+    return
+  }
+
+  if (!data.value.results) {
+    results.value = []
+    loading.value = false
+    return
+  }
+
+  loading.value = false
+
+  results.value = data.value.results
+}, 250)
 </script>
 
 <template>
-  <form @submit.prevent="submit" class="mt-12 items-center md:grid md:grid-cols-[1fr_auto] md:gap-4 xl:mx-auto xl:mt-16 xl:max-w-2xl">
+  <form @submit.prevent="submitSearch" class="mt-12 items-center md:grid md:grid-cols-[1fr_auto] md:gap-4 xl:mx-auto xl:mt-16 xl:max-w-2xl">
     <div class="relative flex items-center">
       <IconSearch class="pointer-events-none absolute left-6" />
       <input
@@ -69,11 +81,13 @@ const getFormattedNameForResult = (result) => {
         required
         minlength="3"
         class="h-14 w-full rounded-xl bg-neutral-800 pl-[3.75rem] pr-6 text-white outline-none placeholder:text-neutral-200 focus:outline-2 focus:outline-white"
+        @keyup="performSearch"
       />
       <ul
         v-if="showResults"
         class="absolute top-full z-10 mt-2 grid max-h-44 w-full gap-1 overflow-y-auto rounded-xl border border-neutral-700 bg-neutral-800 p-2"
         tabindex="-1"
+        @keydown.escape="showResults = false"
       >
         <li v-if="!loading" v-for="result in results" :key="result.id">
           <button
